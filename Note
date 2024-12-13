@@ -1,0 +1,13 @@
+Converting ams code from python - c++
+steps _involes :
+1. Camera calibration:
+    camera_calibration.ipynb output-camera_calibration_results.xl
+2. GUI :
+    - creating gui to slecting oprating region (region of intresed) and adujusting camera exposure.  
+        1. GUI_1_line_detection_1_xyz
+        2. Calibrate_Camera -input-camera_calibration_results.xl 
+        3. ROI_above
+        4. ROI_below
+        5. Blue_Laser_Detection
+        6. camera_parameters
+        7. depth_detection
