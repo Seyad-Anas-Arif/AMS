@@ -1,3 +1,8 @@
+project name : Angle Measurement Sensor
+processor    : verdin imxmp
+// to connect that processor vis ssh
+$ ssh root@verdin-imx8mp-15010457.local
+
 Converting ams code from python - c++
 steps _involes :
 1. Camera calibration:
