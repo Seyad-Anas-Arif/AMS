@@ -16,3 +16,31 @@ steps _involes :
         5. Blue_Laser_Detection
         6. camera_parameters
         7. depth_detection
+
+--------------------------------------for compiling application ------------------
+$ scp -r cam_1 root@verdin-imx8mp-15010457.local:
+// Before compailing source enviorment variable 
+$ . /opt/tdx-xwayland/6.6.0/environment-setup-cortexa53-tdx-linux 
+
+$ uic touch_display.ui -o ui_touch_display.h
+$ moc touch_display.h -o moc_touch_display.cpp
+// cross compilation step 
+CXX=/opt/tdx-xwayland/6.6.0/sysroots/x86_64-pokysdk-linux/usr/bin/arm-tdx-linux-gnueabi-g++
+$   CXXFLAGS="-I. \
+          -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/QtCore \
+          -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/QtGui \
+          -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/QtWidgets \
+          -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/opencv \
+          -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB"
+
+$ LDFLAGS="-L/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib \
+         -lQt5Widgets -lQt5Gui -lQt5Core -lopencv_core -lopencv_imgproc -lopencv_highgui -lpthread -lopencv_calib3d -lopencv_imgcodecs -lopencv_videoio"
+
+
+# Compile all source files
+$ $CXX $CXXFLAGS -c main.cpp -o main.o
+$ $CXX $CXXFLAGS -c touch_display.cpp -o touch_display.o
+$ $CXX $CXXFLAGS -c moc_touch_display.cpp -o moc_touch_display.o
+
+# Link into the final executable
+$ $CXX main.o cameraapp.o moc_cameraapp.o -o cam_2 $LDFLAGS
