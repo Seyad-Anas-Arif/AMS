@@ -1,3 +1,4 @@
+/* this  folder is for  using  THread insteadof timmer 75% completed but still its slow only in displaying*/
 #include "CameraApp.h"
 #include <QApplication>
 

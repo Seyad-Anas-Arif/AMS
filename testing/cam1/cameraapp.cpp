@@ -16,19 +16,10 @@ CameraApp::CameraApp(QWidget *parent)
 calibrationDone(false), 
 snapsTaken(0) 
 {
-    gridRows = 6;
-    gridCols = 9;
-    gridPitch = 29;
-    maxSnaps = 15;
-//cap("v4l2src device=/dev/video2 ! videoconvert ! appsink", cv::CAP_GSTREAMER)
+    
     initUI();
 
-     {
-    // if (!cap.isOpened()) {
-    //     std::cerr << "Error: Could not open video stream using GStreamer pipeline!" << std::endl;
-    // }
-}
-    cap.open(0); // Open the default camera
+    cap.open(0, cv::CAP_V4L2); // Open the default camera
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &CameraApp::updateFrame);
     timer->start(30);
@@ -61,23 +52,28 @@ void CameraApp::initUI()
 
 void CameraApp::createMainPage()
 {
+    initgridRows = 6;
+    initgridCols = 9;
+    initgridPitch = 29;
+    initmaxSnaps = 20;
+
     videoLabel = new QLabel(page1);
     videoLabel->setFixedSize(640, 480);
 
     gridRowsInput = new QSpinBox(page1);
-    gridRowsInput->setValue(gridRows);
+    gridRowsInput->setValue(initgridRows);
     gridRowsInput->setFixedSize(60, 25);
 
     gridColsInput = new QSpinBox(page1);
-    gridColsInput->setValue(gridCols);
+    gridColsInput->setValue(initgridCols);
     gridColsInput->setFixedSize(60, 25);
 
     gridPitchInput = new QDoubleSpinBox(page1);
-    gridPitchInput->setValue(gridPitch);
+    gridPitchInput->setValue(initgridPitch);
     gridPitchInput->setFixedSize(60, 25);
 
     maxSnapsInput = new QSpinBox(page1);
-    maxSnapsInput->setValue(maxSnaps);
+    maxSnapsInput->setValue(initmaxSnaps);
     maxSnapsInput->setFixedSize(60, 25);
 
     maxSnapsStatus = new QLabel("", page1);
@@ -119,6 +115,8 @@ void CameraApp::createMainPage()
     page1Layout->addWidget(videoLabel);
     page1Layout->addLayout(gridLayout);
     page1Layout->addLayout(buttonLayout);
+
+
 }
 
 void CameraApp::createInspectionPage()
@@ -148,27 +146,54 @@ void CameraApp::updateFrame()
 {
     cv::Mat frame;
     cap >> frame;
-    if (!frame.empty())
+    if (frame.empty())
     {
-        cv::Mat gray;
-        cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
-
-        std::vector<cv::Point2f> corners;
-        bool found = cv::findChessboardCorners(gray, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners);
-
-        if (found)
-        {
-            cv::drawChessboardCorners(frame, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners, found);
-        }
-
-        cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-        displayImage(frame, videoLabel);
+        qWarning("Failed to capture frame.");
+        return;
     }
+
+    // Process frame
+    cv::Mat gray;
+    cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+
+    std::vector<cv::Point2f> corners;
+    bool found = cv::findChessboardCorners(gray, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners);
+
+    if (found)
+    {
+        cv::drawChessboardCorners(frame, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners, found);
+    }
+
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+    displayImage(frame, videoLabel);
 }
+
 
 void CameraApp::displayImage(const cv::Mat &img, QLabel *label)
 {
-    QImage qimg(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+    if (img.empty())
+    {
+        qWarning("Image is empty, cannot display.");
+        return;
+    }
+
+    cv::Mat displayImg;
+    if (img.channels() == 1)
+    {
+        // Convert grayscale to RGB
+        cv::cvtColor(img, displayImg, cv::COLOR_GRAY2RGB);
+    }
+    else if (img.channels() == 3)
+    {
+        displayImg = img;
+    }
+    else
+    {
+        qWarning("Unsupported number of channels in the image.");
+        return;
+    }
+
+    QImage qimg(displayImg.data, displayImg.cols, displayImg.rows, displayImg.step, QImage::Format_RGB888);
     QPixmap pixmap = QPixmap::fromImage(qimg);
     label->setPixmap(pixmap);
 }
@@ -182,16 +207,21 @@ void CameraApp::setSettings()
         gridPitchInput->setEnabled(false);
         maxSnapsInput->setEnabled(false);
 
+        gridRows = gridRowsInput->value();
+        gridCols = gridColsInput->value();
+        gridPitch = gridPitchInput->value();
+        maxSnaps = maxSnapsInput->value();
+
         snapButton->setEnabled(true);
         maxSnapsStatus->setText("Settings applied. You can start snapping.");
         setButton->setText("Reset");
     }
     else
     {
-        gridRowsInput->setValue(6);
-        gridColsInput->setValue(9);
-        gridPitchInput->setValue(10);
-        maxSnapsInput->setValue(40);
+        // gridRowsInput->setValue(6);
+        // gridColsInput->setValue(9);
+        // gridPitchInput->setValue(10);
+        // maxSnapsInput->setValue(40);
 
         gridRowsInput->setEnabled(true);
         gridColsInput->setEnabled(true);
@@ -211,7 +241,7 @@ void CameraApp::setSettings()
 
 void CameraApp::snapImage()
 {
-    if (snapsTaken >= maxSnapsInput->value())
+     if (snapsTaken >= maxSnaps)
     {
         maxSnapsStatus->setText("You have reached the maximum number of snaps.");
         inspectButton->setEnabled(true);
@@ -221,36 +251,40 @@ void CameraApp::snapImage()
     }
 
     cv::Mat frame;
-    cap >> frame;
-    if (!frame.empty())
+    bool ret = cap.read(frame);
+    if (ret)
     {
         cv::Mat gray;
         cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
 
         std::vector<cv::Point2f> corners;
-        bool found = cv::findChessboardCorners(gray, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners);
+        ret = cv::findChessboardCorners(gray, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners);
 
-        if (found)
+        if (ret)
         {
-            cv::Mat objp = cv::Mat::zeros(gridRowsInput->value() * gridColsInput->value(), 3, CV_32F);
-            for (int i = 0; i < gridColsInput->value(); ++i)
+            std::vector<cv::Point3f> objp;
+            for (int i = 0; i < gridRowsInput->value(); i++)
             {
-                for (int j = 0; j < gridRowsInput->value(); ++j)
+                for (int j = 0; j < gridColsInput->value(); j++)
                 {
-                    objp.at<float>(i * gridRowsInput->value() + j, 0) = i * gridPitchInput->value();
-                    objp.at<float>(i * gridRowsInput->value() + j, 1) = j * gridPitchInput->value();
+                    objp.push_back(cv::Point3f(j * gridPitchInput->value(), i * gridPitchInput->value(), 0.0f));
                 }
             }
 
             objPoints.push_back(objp);
-            cv::cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 30, 0.1));
+
+            // Refine corner positions
+            cv::cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1),
+                             cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 30, 0.001));
+
             imgPoints.push_back(corners);
 
             snapsTaken++;
-            cv::drawChessboardCorners(frame, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners, found);
+            cv::drawChessboardCorners(frame, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners, ret);
+
             maxSnapsStatus->setText(QString("Snap %1 captured successfully.").arg(snapsTaken));
 
-            if (snapsTaken < maxSnapsInput->value())
+            if (snapsTaken < maxSnaps)
             {
                 inspectButton->setEnabled(false);
                 saveButton->setEnabled(false);
@@ -260,6 +294,10 @@ void CameraApp::snapImage()
         {
             maxSnapsStatus->setText("Checkerboard not detected in the frame.");
         }
+    }
+    else
+    {
+        maxSnapsStatus->setText("Failed to capture frame from camera.");
     }
 }
 

@@ -50,9 +50,14 @@ private:
     
     int gridRows;
     int gridCols;
-    int gridPitch;
+    double gridPitch;
     int maxSnaps;
     int snapsTaken;
+
+    int initgridRows;
+    int initgridCols ;
+    double initgridPitch;
+    int initmaxSnaps;
     
     std::vector<std::vector<cv::Point3f>> objPoints;
     std::vector<std::vector<cv::Point2f>> imgPoints;

@@ -9,7 +9,9 @@ LIBS += `pkg-config --libs opencv4`
 
 # Source and header files
 SOURCES += main.cpp \
-           CameraApp.cpp 
+           CameraApp.cpp \
+           fproc.cpp 
            
 
-HEADERS += CameraApp.h 
+HEADERS += CameraApp.h \
+           fproc.h

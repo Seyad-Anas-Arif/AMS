@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = cam1.0.0
-DISTDIR = /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/.tmp/cam1.0.0
+DISTDIR = /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/cam1/.tmp/cam1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) `pkg-config --libs opencv4` /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
@@ -130,7 +130,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -236,7 +236,7 @@ Makefile: cam.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
-		.qmake.stash \
+		../.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -331,7 +331,7 @@ Makefile: cam.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
-.qmake.stash:
+../.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -378,7 +378,6 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
-	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -642,7 +641,7 @@ moc_cameraapp.cpp: cameraapp.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/QPixmap \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing -I/usr/include/opencv4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0 -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/aarch64-tdx-linux -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/backward -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include-fixed -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include cameraapp.h -o moc_cameraapp.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/cam1/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/cam1 -I/usr/include/opencv4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0 -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/aarch64-tdx-linux -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/backward -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include-fixed -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include cameraapp.h -o moc_cameraapp.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
