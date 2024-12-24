@@ -44,3 +44,60 @@ $ $CXX $CXXFLAGS -c moc_touch_display.cpp -o moc_touch_display.o
 
 # Link into the final executable
 $ $CXX main.o cameraapp.o moc_cameraapp.o -o cam_2 $LDFLAGS
+------------------------------------------------------+
+#QT += widgets
+#CONFIG += c++17
+
+# Include paths
+#INCLUDEPATH += /usr/include/opencv4
+
+# Link OpenCV libraries
+#LIBS += `pkg-config --libs opencv4`
+
+# Source and header files
+#SOURCES += main.cpp \
+ #          CameraApp.cpp 
+           
+
+#HEADERS += CameraApp.h 
+
+--------------------------------------------------------
+void CameraApp::captureFrames() {
+    cv::VideoCapture cap(0, cv::CAP_V4L2);
+    if (!cap.isOpened()) {
+        qCritical("Error: Could not open the camera.");
+        return;
+    }
+
+    while (!stopFlag) {
+        cv::Mat frame;
+        cap >> frame;
+
+        if (!frame.empty()) {
+            // Convert to grayscale for chessboard detection
+            cv::Mat gray;
+            cv::cvtColor(frame, gray, cv::COLOR_BGR2GRAY);
+
+            // Find chessboard corners
+            std::vector<cv::Point2f> corners;
+            bool found = cv::findChessboardCorners(gray, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners);
+
+            if (found) {
+                // Draw the chessboard corners on the frame
+                cv::drawChessboardCorners(frame, cv::Size(gridColsInput->value(), gridRowsInput->value()), corners, found);
+            }
+
+            // Convert to RGB for displaying in the QLabel
+            cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+
+            QImage qFrame(frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+            QMetaObject::invokeMethod(this, [this, qFrame]() {
+                videoLabel->setPixmap(QPixmap::fromImage(qFrame).scaled(videoLabel->size(), Qt::KeepAspectRatio));
+            }, Qt::QueuedConnection);
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(30)); // Control frame rate (~30fps)
+    }
+
+    cap.release();
+}
