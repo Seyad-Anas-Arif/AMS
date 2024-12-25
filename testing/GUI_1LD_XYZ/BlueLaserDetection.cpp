@@ -161,26 +161,26 @@ private:
     cv::Vec4i optimal_line;
 };
 
-int main() {
-    cv::Mat frame = cv::imread("input_image.jpg");
-    if (frame.empty()) {
-        std::cerr << "Error: Unable to load the image!" << std::endl;
-        return -1;
-    }
+// int main() {
+//     cv::Mat frame = cv::imread("input_image.jpg");
+//     if (frame.empty()) {
+//         std::cerr << "Error: Unable to load the image!" << std::endl;
+//         return -1;
+//     }
 
-    try {
-        LaserDetection detector(frame);
-        detector.laserDetection();
+//     try {
+//         LaserDetection detector(frame);
+//         detector.laserDetection();
 
-        cv::imshow("Detected Laser", frame);
-        cv::waitKey(0);
-    } catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-        return -1;
-    }
+//         cv::imshow("Detected Laser", frame);
+//         cv::waitKey(0);
+//     } catch (const std::exception& e) {
+//         std::cerr << "Exception: " << e.what() << std::endl;
+//         return -1;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 /*-------------------------------------alter native 
 #include <opencv2/opencv.hpp>

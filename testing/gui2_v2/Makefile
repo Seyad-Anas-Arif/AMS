@@ -16,8 +16,8 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+CXXFLAGS      = -pipe -O2 -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I. -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -160,7 +160,7 @@ TARGET        = gui
 first: all
 ####### Build rules
 
-gui:  $(OBJECTS)  
+gui: ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: gui.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -369,6 +369,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents MainWindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents main.cpp MainWindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -397,14 +398,14 @@ compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
-	g++ -pipe -O2 -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
+	g++ -pipe -O2 -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: moc_MainWindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_MainWindow.cpp
 moc_MainWindow.cpp: MainWindow.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMainWindow \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtguiglobal.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h \
@@ -430,6 +431,7 @@ moc_MainWindow.cpp: MainWindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qversiontagging.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtgui-config.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgets-config.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qwindowdefs.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qobjectdefs.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qnamespace.h \
@@ -506,18 +508,57 @@ moc_MainWindow.cpp: MainWindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qfiledevice.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvector2d.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtouchdevice.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
+		ui_mainwindow.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QIcon \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qeventloop.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qguiapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qinputmethod.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvalidator.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qregularexpression.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFrame \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qboxlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMenuBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenubar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenu.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qaction.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qactiongroup.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSlider \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStatusBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstatusbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QDebug \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/gui2_v2/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/gui2_v2 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0 -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/aarch64-tdx-linux -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/backward -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include-fixed -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include MainWindow.h -o moc_MainWindow.cpp
@@ -526,15 +567,20 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all:
+compiler_uic_make_all: ui_mainwindow.h
 compiler_uic_clean:
+	-$(DEL_FILE) ui_mainwindow.h
+ui_mainwindow.h: mainwindow.ui \
+		/usr/lib/qt5/bin/uic
+	/usr/lib/qt5/bin/uic mainwindow.ui -o ui_mainwindow.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -648,24 +694,57 @@ main.o: main.cpp /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qguiapplication.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qinputmethod.h \
 		MainWindow.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMainWindow \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
+		ui_mainwindow.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QIcon \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvalidator.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qregularexpression.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFrame \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qboxlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayoutitem.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMenuBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenubar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenu.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qaction.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qactiongroup.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSlider \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStatusBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstatusbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 MainWindow.o: MainWindow.cpp MainWindow.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMainWindow \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtguiglobal.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qglobal.h \
@@ -691,6 +770,7 @@ MainWindow.o: MainWindow.cpp MainWindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qversiontagging.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtgui-config.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgets-config.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qwindowdefs.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qobjectdefs.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qnamespace.h \
@@ -767,26 +847,57 @@ MainWindow.o: MainWindow.cpp MainWindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtCore/qfiledevice.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvector2d.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtouchdevice.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
+		ui_mainwindow.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QVariant \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QIcon \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qcoreapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qeventloop.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qguiapplication.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qinputmethod.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvalidator.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qregularexpression.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFrame \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qboxlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLineEdit \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlineedit.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextcursor.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtGui/qpen.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextoption.h
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMenuBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenubar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmenu.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qaction.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qactiongroup.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSlider \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStatusBar \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstatusbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o MainWindow.cpp
 
 moc_MainWindow.o: moc_MainWindow.cpp 

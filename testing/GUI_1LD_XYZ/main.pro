@@ -10,7 +10,12 @@ TARGET = SLD_XYZ
 LIBS += `pkg-config --libs opencv4`
 
 # Source and header files
-SOURCES += main.cpp 
+SOURCES += mainGUI.cpp \
+           ROI.cpp \
+           BlueLaserDetection.cpp \
+           DepthDetection.cpp \
+           CalibrateCamera.cpp 
+
            
            
 

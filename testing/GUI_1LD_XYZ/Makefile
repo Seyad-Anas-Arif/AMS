@@ -52,8 +52,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp 
-OBJECTS       = main.o
+SOURCES       = MainGUI.cpp 
+OBJECTS       = MainGUI.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -147,7 +147,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		main.pro  main.cpp
+		main.pro  MainGUI.cpp
 QMAKE_TARGET  = SLD_XYZ
 DESTDIR       = 
 TARGET        = SLD_XYZ
@@ -363,7 +363,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents MainGUI.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -398,10 +398,10 @@ compiler_moc_header_make_all:
 compiler_moc_header_clean:
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
-compiler_moc_source_make_all: main.moc
+compiler_moc_source_make_all: MainGUI.moc
 compiler_moc_source_clean:
-	-$(DEL_FILE) main.moc
-main.moc: main.cpp \
+	-$(DEL_FILE) MainGUI.moc
+MainGUI.moc: MainGUI.cpp \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qapplication.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h \
@@ -515,8 +515,8 @@ main.moc: main.cpp \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
@@ -524,15 +524,160 @@ main.moc: main.cpp \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvalidator.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qregularexpression.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFormLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qformlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSlider \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLineEdit \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlineedit.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextcursor.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qpen.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QInputDialog \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qinputdialog.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qdialog.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMessageBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmessagebox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QThread \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qthread.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qdeadlinetimer.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qelapsedtimer.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QImage \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QPixmap \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QFont \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QCoreApplication \
+		/usr/include/opencv4/opencv2/opencv.hpp \
+		/usr/include/opencv4/opencv2/opencv_modules.hpp \
+		/usr/include/opencv4/opencv2/core.hpp \
+		/usr/include/opencv4/opencv2/core/cvdef.h \
+		/usr/include/opencv4/opencv2/core/version.hpp \
+		/usr/include/opencv4/opencv2/core/hal/interface.h \
+		/usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+		/usr/include/opencv4/opencv2/core/cv_cpu_helper.h \
+		/usr/include/opencv4/opencv2/core/hal/msa_macros.h \
+		/usr/include/opencv4/opencv2/core/fast_math.hpp \
+		/usr/include/opencv4/opencv2/core/base.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+		/usr/include/opencv4/opencv2/core/neon_utils.hpp \
+		/usr/include/opencv4/opencv2/core/vsx_utils.hpp \
+		/usr/include/opencv4/opencv2/core/check.hpp \
+		/usr/include/opencv4/opencv2/core/traits.hpp \
+		/usr/include/opencv4/opencv2/core/matx.hpp \
+		/usr/include/opencv4/opencv2/core/saturate.hpp \
+		/usr/include/opencv4/opencv2/core/types.hpp \
+		/usr/include/opencv4/opencv2/core/mat.hpp \
+		/usr/include/opencv4/opencv2/core/bufferpool.hpp \
+		/usr/include/opencv4/opencv2/core/mat.inl.hpp \
+		/usr/include/opencv4/opencv2/core/persistence.hpp \
+		/usr/include/opencv4/opencv2/core/operations.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd.inl.hpp \
+		/usr/include/opencv4/opencv2/core/utility.hpp \
+		/usr/include/opencv4/opencv2/core/utils/instrumentation.hpp \
+		/usr/include/opencv4/opencv2/core/utils/tls.hpp \
+		/usr/include/opencv4/opencv2/core/optim.hpp \
+		/usr/include/opencv4/opencv2/core/ovx.hpp \
+		/usr/include/opencv4/opencv2/calib3d.hpp \
+		/usr/include/opencv4/opencv2/features2d.hpp \
+		/usr/include/opencv4/opencv2/flann/miniflann.hpp \
+		/usr/include/opencv4/opencv2/flann/defines.h \
+		/usr/include/opencv4/opencv2/flann/config.h \
+		/usr/include/opencv4/opencv2/core/affine.hpp \
+		/usr/include/opencv4/opencv2/dnn.hpp \
+		/usr/include/opencv4/opencv2/dnn/dnn.hpp \
+		/usr/include/opencv4/opencv2/core/async.hpp \
+		/usr/include/opencv4/opencv2/dnn/version.hpp \
+		/usr/include/opencv4/opencv2/dnn/dict.hpp \
+		/usr/include/opencv4/opencv2/dnn/layer.hpp \
+		/usr/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+		/usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+		/usr/include/opencv4/opencv2/flann.hpp \
+		/usr/include/opencv4/opencv2/flann/flann_base.hpp \
+		/usr/include/opencv4/opencv2/flann/general.h \
+		/usr/include/opencv4/opencv2/flann/matrix.h \
+		/usr/include/opencv4/opencv2/flann/params.h \
+		/usr/include/opencv4/opencv2/flann/any.h \
+		/usr/include/opencv4/opencv2/flann/saving.h \
+		/usr/include/opencv4/opencv2/flann/nn_index.h \
+		/usr/include/opencv4/opencv2/flann/result_set.h \
+		/usr/include/opencv4/opencv2/flann/all_indices.h \
+		/usr/include/opencv4/opencv2/flann/kdtree_index.h \
+		/usr/include/opencv4/opencv2/flann/dynamic_bitset.h \
+		/usr/include/opencv4/opencv2/flann/dist.h \
+		/usr/include/opencv4/opencv2/flann/heap.h \
+		/usr/include/opencv4/opencv2/flann/allocator.h \
+		/usr/include/opencv4/opencv2/flann/random.h \
+		/usr/include/opencv4/opencv2/flann/kdtree_single_index.h \
+		/usr/include/opencv4/opencv2/flann/kmeans_index.h \
+		/usr/include/opencv4/opencv2/flann/logger.h \
+		/usr/include/opencv4/opencv2/flann/composite_index.h \
+		/usr/include/opencv4/opencv2/flann/linear_index.h \
+		/usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+		/usr/include/opencv4/opencv2/flann/lsh_index.h \
+		/usr/include/opencv4/opencv2/flann/lsh_table.h \
+		/usr/include/opencv4/opencv2/flann/autotuned_index.h \
+		/usr/include/opencv4/opencv2/flann/ground_truth.h \
+		/usr/include/opencv4/opencv2/flann/index_testing.h \
+		/usr/include/opencv4/opencv2/flann/timer.h \
+		/usr/include/opencv4/opencv2/flann/sampling.h \
+		/usr/include/opencv4/opencv2/highgui.hpp \
+		/usr/include/opencv4/opencv2/imgcodecs.hpp \
+		/usr/include/opencv4/opencv2/videoio.hpp \
+		/usr/include/opencv4/opencv2/imgproc.hpp \
+		/usr/include/opencv4/opencv2/imgproc/segmentation.hpp \
+		/usr/include/opencv4/opencv2/ml.hpp \
+		/usr/include/opencv4/opencv2/ml/ml.inl.hpp \
+		/usr/include/opencv4/opencv2/objdetect.hpp \
+		/usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+		/usr/include/opencv4/opencv2/objdetect/face.hpp \
+		/usr/include/opencv4/opencv2/photo.hpp \
+		/usr/include/opencv4/opencv2/stitching.hpp \
+		/usr/include/opencv4/opencv2/stitching/warpers.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+		/usr/include/opencv4/opencv2/core/cuda.hpp \
+		/usr/include/opencv4/opencv2/core/cuda_types.hpp \
+		/usr/include/opencv4/opencv2/core/cuda.inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/util.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+		/usr/include/opencv4/opencv2/video.hpp \
+		/usr/include/opencv4/opencv2/video/tracking.hpp \
+		/usr/include/opencv4/opencv2/video/background_segm.hpp \
+		ROI.cpp \
+		BlueLaserDetection.cpp \
+		DepthDetection.cpp \
+		CalibrateCamera.cpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/GUI_1LD_XYZ/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/GUI_1LD_XYZ -I/usr/include/opencv4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0 -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/aarch64-tdx-linux -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/backward -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include-fixed -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include main.cpp -o main.moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/GUI_1LD_XYZ/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/seyadanasarif/2024/Angle_measurement_sensor/AMS/testing/GUI_1LD_XYZ -I/usr/include/opencv4 -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0 -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/aarch64-tdx-linux -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include/c++/11.4.0/backward -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/lib/aarch64-tdx-linux/11.4.0/include -I/opt/tdx-xwayland/6.6.0/sysroots/x86_64-tdxsdk-linux/usr/lib/aarch64-tdx-linux/gcc/aarch64-tdx-linux/11.4.0/include-fixed -I/opt/tdx-xwayland/6.6.0/sysroots/cortexa53-tdx-linux/usr/include MainGUI.cpp -o MainGUI.moc
 
 compiler_uic_make_all:
 compiler_uic_clean:
@@ -546,7 +691,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_source_clean
 
 ####### Compile
 
-main.o: main.cpp /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
+MainGUI.o: MainGUI.cpp /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qapplication.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtwidgetsglobal.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtguiglobal.h \
@@ -659,8 +804,8 @@ main.o: main.cpp /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmainwindow.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabwidget.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtGui/qicon.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qframe.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QWidget \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QVBoxLayout \
@@ -668,13 +813,159 @@ main.o: main.cpp /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QApplication \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayout.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlayoutitem.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qgridlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSpinBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qvalidator.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qregularexpression.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QFormLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qformlayout.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QSlider \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qslider.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractslider.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QPushButton \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qpushbutton.h \
 		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractbutton.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLabel \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlabel.h \
-		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QHBoxLayout
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QLineEdit \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qlineedit.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextcursor.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextformat.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qpen.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/qtextoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QComboBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qcombobox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstyle.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtabbar.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qrubberband.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QInputDialog \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qinputdialog.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qdialog.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QMessageBox \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qmessagebox.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/QStackedWidget \
+		/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qstackedwidget.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QThread \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qthread.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qdeadlinetimer.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/qelapsedtimer.h \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QImage \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QPixmap \
+		/usr/include/x86_64-linux-gnu/qt5/QtGui/QFont \
+		/usr/include/x86_64-linux-gnu/qt5/QtCore/QCoreApplication \
+		/usr/include/opencv4/opencv2/opencv.hpp \
+		/usr/include/opencv4/opencv2/opencv_modules.hpp \
+		/usr/include/opencv4/opencv2/core.hpp \
+		/usr/include/opencv4/opencv2/core/cvdef.h \
+		/usr/include/opencv4/opencv2/core/version.hpp \
+		/usr/include/opencv4/opencv2/core/hal/interface.h \
+		/usr/include/opencv4/opencv2/core/cv_cpu_dispatch.h \
+		/usr/include/opencv4/opencv2/core/cv_cpu_helper.h \
+		/usr/include/opencv4/opencv2/core/hal/msa_macros.h \
+		/usr/include/opencv4/opencv2/core/fast_math.hpp \
+		/usr/include/opencv4/opencv2/core/base.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd_wrapper.hpp \
+		/usr/include/opencv4/opencv2/core/neon_utils.hpp \
+		/usr/include/opencv4/opencv2/core/vsx_utils.hpp \
+		/usr/include/opencv4/opencv2/core/check.hpp \
+		/usr/include/opencv4/opencv2/core/traits.hpp \
+		/usr/include/opencv4/opencv2/core/matx.hpp \
+		/usr/include/opencv4/opencv2/core/saturate.hpp \
+		/usr/include/opencv4/opencv2/core/types.hpp \
+		/usr/include/opencv4/opencv2/core/mat.hpp \
+		/usr/include/opencv4/opencv2/core/bufferpool.hpp \
+		/usr/include/opencv4/opencv2/core/mat.inl.hpp \
+		/usr/include/opencv4/opencv2/core/persistence.hpp \
+		/usr/include/opencv4/opencv2/core/operations.hpp \
+		/usr/include/opencv4/opencv2/core/cvstd.inl.hpp \
+		/usr/include/opencv4/opencv2/core/utility.hpp \
+		/usr/include/opencv4/opencv2/core/utils/instrumentation.hpp \
+		/usr/include/opencv4/opencv2/core/utils/tls.hpp \
+		/usr/include/opencv4/opencv2/core/optim.hpp \
+		/usr/include/opencv4/opencv2/core/ovx.hpp \
+		/usr/include/opencv4/opencv2/calib3d.hpp \
+		/usr/include/opencv4/opencv2/features2d.hpp \
+		/usr/include/opencv4/opencv2/flann/miniflann.hpp \
+		/usr/include/opencv4/opencv2/flann/defines.h \
+		/usr/include/opencv4/opencv2/flann/config.h \
+		/usr/include/opencv4/opencv2/core/affine.hpp \
+		/usr/include/opencv4/opencv2/dnn.hpp \
+		/usr/include/opencv4/opencv2/dnn/dnn.hpp \
+		/usr/include/opencv4/opencv2/core/async.hpp \
+		/usr/include/opencv4/opencv2/dnn/version.hpp \
+		/usr/include/opencv4/opencv2/dnn/dict.hpp \
+		/usr/include/opencv4/opencv2/dnn/layer.hpp \
+		/usr/include/opencv4/opencv2/dnn/dnn.inl.hpp \
+		/usr/include/opencv4/opencv2/dnn/utils/inference_engine.hpp \
+		/usr/include/opencv4/opencv2/flann.hpp \
+		/usr/include/opencv4/opencv2/flann/flann_base.hpp \
+		/usr/include/opencv4/opencv2/flann/general.h \
+		/usr/include/opencv4/opencv2/flann/matrix.h \
+		/usr/include/opencv4/opencv2/flann/params.h \
+		/usr/include/opencv4/opencv2/flann/any.h \
+		/usr/include/opencv4/opencv2/flann/saving.h \
+		/usr/include/opencv4/opencv2/flann/nn_index.h \
+		/usr/include/opencv4/opencv2/flann/result_set.h \
+		/usr/include/opencv4/opencv2/flann/all_indices.h \
+		/usr/include/opencv4/opencv2/flann/kdtree_index.h \
+		/usr/include/opencv4/opencv2/flann/dynamic_bitset.h \
+		/usr/include/opencv4/opencv2/flann/dist.h \
+		/usr/include/opencv4/opencv2/flann/heap.h \
+		/usr/include/opencv4/opencv2/flann/allocator.h \
+		/usr/include/opencv4/opencv2/flann/random.h \
+		/usr/include/opencv4/opencv2/flann/kdtree_single_index.h \
+		/usr/include/opencv4/opencv2/flann/kmeans_index.h \
+		/usr/include/opencv4/opencv2/flann/logger.h \
+		/usr/include/opencv4/opencv2/flann/composite_index.h \
+		/usr/include/opencv4/opencv2/flann/linear_index.h \
+		/usr/include/opencv4/opencv2/flann/hierarchical_clustering_index.h \
+		/usr/include/opencv4/opencv2/flann/lsh_index.h \
+		/usr/include/opencv4/opencv2/flann/lsh_table.h \
+		/usr/include/opencv4/opencv2/flann/autotuned_index.h \
+		/usr/include/opencv4/opencv2/flann/ground_truth.h \
+		/usr/include/opencv4/opencv2/flann/index_testing.h \
+		/usr/include/opencv4/opencv2/flann/timer.h \
+		/usr/include/opencv4/opencv2/flann/sampling.h \
+		/usr/include/opencv4/opencv2/highgui.hpp \
+		/usr/include/opencv4/opencv2/imgcodecs.hpp \
+		/usr/include/opencv4/opencv2/videoio.hpp \
+		/usr/include/opencv4/opencv2/imgproc.hpp \
+		/usr/include/opencv4/opencv2/imgproc/segmentation.hpp \
+		/usr/include/opencv4/opencv2/ml.hpp \
+		/usr/include/opencv4/opencv2/ml/ml.inl.hpp \
+		/usr/include/opencv4/opencv2/objdetect.hpp \
+		/usr/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp \
+		/usr/include/opencv4/opencv2/objdetect/face.hpp \
+		/usr/include/opencv4/opencv2/photo.hpp \
+		/usr/include/opencv4/opencv2/stitching.hpp \
+		/usr/include/opencv4/opencv2/stitching/warpers.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/warpers.hpp \
+		/usr/include/opencv4/opencv2/core/cuda.hpp \
+		/usr/include/opencv4/opencv2/core/cuda_types.hpp \
+		/usr/include/opencv4/opencv2/core/cuda.inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/matchers.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/util.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/util_inl.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/camera.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/seam_finders.hpp \
+		/usr/include/opencv4/opencv2/stitching/detail/blenders.hpp \
+		/usr/include/opencv4/opencv2/video.hpp \
+		/usr/include/opencv4/opencv2/video/tracking.hpp \
+		/usr/include/opencv4/opencv2/video/background_segm.hpp \
+		ROI.cpp \
+		BlueLaserDetection.cpp \
+		DepthDetection.cpp \
+		CalibrateCamera.cpp \
+		MainGUI.moc
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainGUI.o MainGUI.cpp
 
 ####### Install
 

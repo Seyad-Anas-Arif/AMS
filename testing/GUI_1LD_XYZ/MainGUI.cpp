@@ -25,10 +25,10 @@
 #include <numeric>
 
 // Include necessary headers for custom classes
-#include "ROI.h"
-#include "Blue_Laser_Detection.h"
-#include "depth_detection.h"
-#include "Calibrate_Camera.h"
+#include "ROI.cpp"
+#include "BlueLaserDetection.cpp"
+#include "DepthDetection.cpp"
+#include "CalibrateCamera.cpp"
 
 // Initialize parameters
 cv::VideoCapture cap(0);
@@ -51,6 +51,7 @@ int default_bottom_point_position = bottom_point_position;
 std::map<std::string, std::vector<int>> saved_configs;
 
 // Function to fit a plane to 3D points
+// Function to fit a plane to 3D points
 std::vector<double> fit_plane(const std::vector<std::vector<double>>& points) {
     // Points: Nx3 vector of 3D points
     std::vector<double> centroid(3, 0.0);
@@ -63,16 +64,15 @@ std::vector<double> fit_plane(const std::vector<std::vector<double>>& points) {
         val /= points.size();
     }
 
-    std::vector<std::vector<double>> points_centered(points.size(), std::vector<double>(3));
+    cv::Mat points_centered(points.size(), 3, CV_64F);
     for (size_t i = 0; i < points.size(); ++i) {
         for (size_t j = 0; j < 3; ++j) {
-            points_centered[i][j] = points[i][j] - centroid[j];
+            points_centered.at<double>(i, j) = points[i][j] - centroid[j];
         }
     }
 
-    cv::Mat mat_points = cv::Mat(points_centered).reshape(1);
     cv::Mat w, u, vt;
-    cv::SVD::compute(mat_points, w, u, vt);
+    cv::SVD::compute(points_centered, w, u, vt);
     std::vector<double> normal = { vt.at<double>(2, 0), vt.at<double>(2, 1), vt.at<double>(2, 2) }; // Last row of V^T is the normal to the plane
     double norm = std::sqrt(std::inner_product(normal.begin(), normal.end(), normal.begin(), 0.0));
     for (auto& val : normal) {
@@ -126,6 +126,8 @@ void update_bottom_point_position(int value) {
 class CameraThread : public QThread {
     Q_OBJECT
 public:
+    int offset_line_value;
+    bool plot_point;
     // Signal to send the image to the main thread
     signals:
         void image_main(const QImage& image);
@@ -446,7 +448,29 @@ public:
             QMessageBox::warning(this, "Access Denied", "Authentication failed.");
         }
     }
-        
+   //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+   //Adding missed functions from the original code need addd functions to work proper first dstep ti create gui with all the functions.     
+    void ControlCameraWindow::update_image(const QImage& qt_img) {
+        QPixmap pixmap = QPixmap::fromImage(qt_img);
+        label->setPixmap(pixmap);
+    }
+
+
+    void update_y_axis_start_value(){}
+    void update_y_axis_end_value(){}
+    void update_point_position_value(){}
+    void update_bottom_point_position_value(){}
+    void update_offset_line_value(){}
+    void offset_line_value(){}
+    void on_exposure_change(){}
+    void combo_box_changed(){}
+    void unsave_configuration(){}
+    void restore_default_values(){}
+    void save_current_config(){}
+    void apply_unapply_changes(){}
+    void exit_action(){}
+   
+   //----------------------------------------------------------------------------------------------------------------------------------------------------------------     
     void run_action() {
         // Handle the Run button action to switch to the result page.
         // Update the position text
@@ -507,6 +531,7 @@ private:
     QLabel* offset_value_label;
     QLabel* position_label;
     QString position_text;
+    QLabel* live_feed_label;
     bool plot_point;
     CameraThread* camera_thread;
 };
@@ -517,3 +542,4 @@ int main(int argc, char *argv[]) {
     window.show();
     return app.exec();
 }
+#include "MainGUI.moc"

@@ -88,44 +88,44 @@ public:
     }
 };
 
-int main() {
-    // Camera calibration parameters
-    double fx = 1000.0; // Example value for focal length along x-axis in pixels
-    double fy = 1000.0; // Example value for focal length along y-axis in pixels
-    double cx = 960.0;  // Principal point x-coordinate in pixels
-    double cy = 600.0;  // Principal point y-coordinate in pixels
+// int main() {
+//     // Camera calibration parameters
+//     double fx = 1000.0; // Example value for focal length along x-axis in pixels
+//     double fy = 1000.0; // Example value for focal length along y-axis in pixels
+//     double cx = 960.0;  // Principal point x-coordinate in pixels
+//     double cy = 600.0;  // Principal point y-coordinate in pixels
 
-    // Sensor specifications
-    int sensor_width_pixels = 1920; // Width of the sensor in pixels
-    int sensor_height_pixels = 1200; // Height of the sensor in pixels
-    double pixel_size_mm = 0.003; // Pixel size in mm
+//     // Sensor specifications
+//     int sensor_width_pixels = 1920; // Width of the sensor in pixels
+//     int sensor_height_pixels = 1200; // Height of the sensor in pixels
+//     double pixel_size_mm = 0.003; // Pixel size in mm
 
-    // Calculate sensor dimensions and real-world focal length
-    double sensor_width_mm = sensor_width_pixels * pixel_size_mm; // Sensor width in mm
-    double sensor_height_mm = sensor_height_pixels * pixel_size_mm; // Sensor height in mm
-    double focal_length_mm_x = fx * pixel_size_mm; // Focal length in mm (x-axis)
-    double focal_length_mm_y = fy * pixel_size_mm; // Focal length in mm (y-axis)
-    double principal_point_mm_x = cx * pixel_size_mm; // Principal point in mm (x-axis)
-    double principal_point_mm_y = cy * pixel_size_mm; // Principal point in mm (y-axis)
+//     // Calculate sensor dimensions and real-world focal length
+//     double sensor_width_mm = sensor_width_pixels * pixel_size_mm; // Sensor width in mm
+//     double sensor_height_mm = sensor_height_pixels * pixel_size_mm; // Sensor height in mm
+//     double focal_length_mm_x = fx * pixel_size_mm; // Focal length in mm (x-axis)
+//     double focal_length_mm_y = fy * pixel_size_mm; // Focal length in mm (y-axis)
+//     double principal_point_mm_x = cx * pixel_size_mm; // Principal point in mm (x-axis)
+//     double principal_point_mm_y = cy * pixel_size_mm; // Principal point in mm (y-axis)
 
-    // Triangulation parameters
-    double baseline = 88.60; // Baseline in mm
-    double alpha = M_PI / 6; // Camera tilt angle converted from 30 degrees to radians
+//     // Triangulation parameters
+//     double baseline = 88.60; // Baseline in mm
+//     double alpha = M_PI / 6; // Camera tilt angle converted from 30 degrees to radians
 
-    // Initialize the XYZ class with input parameters
-    XYZ xyz(0, 0, 100, 100, pixel_size_mm, focal_length_mm_x, focal_length_mm_y,
-            principal_point_mm_x, principal_point_mm_y, baseline, alpha);
+//     // Initialize the XYZ class with input parameters
+//     XYZ xyz(0, 0, 100, 100, pixel_size_mm, focal_length_mm_x, focal_length_mm_y,
+//             principal_point_mm_x, principal_point_mm_y, baseline, alpha);
 
-    // Calculate depth to generate 3D points
-    vector<Point3D> laser_points_3D = xyz.depth();
+//     // Calculate depth to generate 3D points
+//     vector<Point3D> laser_points_3D = xyz.depth();
 
-    // Output the 3D points
-    for (const auto &point : laser_points_3D) {
-        cout << "X: " << point.X << ", Y: " << point.Y << ", Z: " << point.Z << endl; // Print each 3D point
-    }
+//     // Output the 3D points
+//     for (const auto &point : laser_points_3D) {
+//         cout << "X: " << point.X << ", Y: " << point.Y << ", Z: " << point.Z << endl; // Print each 3D point
+//     }
 
-    return 0; // End of program
-}
+//     return 0; // End of program
+// }
 
 
 /* ------------------------------------Alternative -------------------------------------------

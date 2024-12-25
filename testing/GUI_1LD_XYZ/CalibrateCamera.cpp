@@ -47,24 +47,24 @@ public:
     }
 };
 
-int main() {
-    // Load a sample frame (replace with your own image or video frame)
-    cv::Mat frame = cv::imread("sample_image.jpg");
-    if (frame.empty()) {
-        std::cerr << "Error: Could not load the image." << std::endl;
-        return -1;
-    }
+// int main() {
+//     // Load a sample frame (replace with your own image or video frame)
+//     cv::Mat frame = cv::imread("sample_image.jpg");
+//     if (frame.empty()) {
+//         std::cerr << "Error: Could not load the image." << std::endl;
+//         return -1;
+//     }
 
-    // Create a CalibrateFeed object and calibrate the frame
-    CalibrateFeed calibrator(frame);
-    cv::Mat undistortedFrame = calibrator.calibrate();
+//     // Create a CalibrateFeed object and calibrate the frame
+//     CalibrateFeed calibrator(frame);
+//     cv::Mat undistortedFrame = calibrator.calibrate();
 
-    // Display the original and undistorted frames
-    cv::imshow("Original Frame", frame);
-    cv::imshow("Undistorted Frame", undistortedFrame);
+//     // Display the original and undistorted frames
+//     cv::imshow("Original Frame", frame);
+//     cv::imshow("Undistorted Frame", undistortedFrame);
 
-    // Wait for a key press
-    cv::waitKey(0);
+//     // Wait for a key press
+//     cv::waitKey(0);
 
-    return 0;
-}
+//     return 0;
+// }
