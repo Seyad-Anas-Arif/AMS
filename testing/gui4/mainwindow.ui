@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1132</width>
+    <height>637</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>-10</y>
+      <width>1081</width>
+      <height>611</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="mainGuiWindow">
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>570</y>
+        <width>571</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="Default_btn">
+         <property name="text">
+          <string>Default</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="save_btn">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="apply_btn">
+         <property name="text">
+          <string>Apply</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="run_btn">
+         <property name="text">
+          <string>Run</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exit_btn">
+         <property name="text">
+          <string>Exit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QSlider" name="X_end_slider">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>380</y>
+        <width>160</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>510</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Settings                  :</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>1050</x>
+        <y>40</y>
+        <width>20</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>?</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="offset_slider">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>430</y>
+        <width>160</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::NoTicks</enum>
+      </property>
+      <property name="tickInterval">
+       <number>0</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>510</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Delete</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="x_start">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>340</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>X-Start</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="Developer_btn">
+      <property name="geometry">
+       <rect>
+        <x>1050</x>
+        <y>60</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="text">
+       <string>D</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>470</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Camera Exposure :</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="x_start_slider">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>340</y>
+        <width>160</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QSlider" name="y_end_slider">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>140</y>
+        <width>16</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>430</y>
+        <width>91</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>OFFSET Line</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="FIlter_comboBox">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>510</y>
+        <width>86</width>
+        <height>25</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>100</y>
+        <width>311</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Intersection between die and bending sheet</string>
+      </property>
+     </widget>
+     <widget class="QSlider" name="y_start_slider">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>140</y>
+        <width>16</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="exposure_spinbox">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>470</y>
+        <width>44</width>
+        <height>26</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="x_end">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>380</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>X- End</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>270</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Y-Start</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Display_lable">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>421</width>
+        <height>511</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="y_end">
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>270</y>
+        <width>67</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Y- End</string>
+      </property>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>490</x>
+        <y>30</y>
+        <width>20</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="resultWindow">
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>60</y>
+        <width>471</width>
+        <height>511</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Result_video_Display</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="rw_back_btn">
+      <property name="geometry">
+       <rect>
+        <x>980</x>
+        <y>560</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="developerWindow">
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>260</y>
+        <width>451</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Welcome To developer window </string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="dw_back_btn">
+      <property name="geometry">
+       <rect>
+        <x>930</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Back</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1132</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -450,11 +450,10 @@ public:
     }
    //----------------------------------------------------------------------------------------------------------------------------------------------------------------
    //Adding missed functions from the original code need addd functions to work proper first dstep ti create gui with all the functions.     
-    void ControlCameraWindow::update_image(const QImage& qt_img) {
+    void update_image(const QImage& qt_img) {
         QPixmap pixmap = QPixmap::fromImage(qt_img);
         label->setPixmap(pixmap);
     }
-
 
     void update_y_axis_start_value(){}
     void update_y_axis_end_value(){}

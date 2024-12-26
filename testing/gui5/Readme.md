@@ -1,0 +1,1 @@
+this folder i am going to create gui by creating gui using qt creater and ading  functionlity by manual 
