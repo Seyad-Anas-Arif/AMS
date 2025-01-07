@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h" // Include the generated UI header
+#include "../inc/mainwindow.h"
+#include "../inc/ui_mainwindow.h" // Include the generated UI header
 #include <QImage>
 #include <QPixmap>
 #include <opencv2/opencv.hpp>
@@ -18,7 +18,7 @@ int image_height = 480;          // Example value
 int line_thickness = 2;          // Example value
 int bottom_line_y = 400;         // Example value
 
-std::tuple<cv::Mat, int, int, int, int, int, int, int> Users_live_feed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px) {
+std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px) {
     cv::Mat img = frame.clone();
 
     // Draw horizontal line
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Connect signals from CameraThread to slots in MainWindow
     connect(cameraThread, &CameraThread::imageMain, this, &MainWindow::updateMainImage);
-    connect(cameraThread, &CameraThread::imageResult, this, &MainWindow::updateResultImage);
+    connect(cameraThread, &CameraThread::imageResult, this, &MainWindow::updateMainImage);
 
     // Connect the run button to the slot
     connect(ui->run_btn, &QPushButton::clicked, this, &MainWindow::onRunButtonClicked);
@@ -80,6 +80,7 @@ void MainWindow::updateMainImage(const QImage &frame)
 void MainWindow::updateResultImage(const QImage &frame)
 {
     // Update the result image label (if you have one)
+    // ui->Result_lable->setPixmap(QPixmap::fromImage(frame).scaled(ui->Result_lable->size(), Qt::KeepAspectRatio));
 }
 
 void MainWindow::onRunButtonClicked()

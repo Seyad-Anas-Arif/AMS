@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <opencv2/opencv.hpp>
-#include "camerathread.h"
+#include "CameraThread.h"
+
+class CameraThread; // Forward declaration
 
 namespace Ui {
 class MainWindow;
@@ -29,9 +31,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    
     CameraThread *cameraThread;
 };
 
-std::tuple<cv::Mat, int, int, int, int, int, int, int> Users_live_feed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px);
+std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px);
 
 #endif // MAINWINDOW_H

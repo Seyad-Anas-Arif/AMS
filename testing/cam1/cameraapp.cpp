@@ -20,6 +20,7 @@ snapsTaken(0)
     initUI();
 
     cap.open(0, cv::CAP_V4L2); // Open the default camera
+    cap.set(cv::CAP_PROP_AUTO_EXPOSURE, 0) ;
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &CameraApp::updateFrame);
     timer->start(30);
