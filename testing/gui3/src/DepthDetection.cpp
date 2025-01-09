@@ -16,6 +16,7 @@ XYZ::XYZ(int x1, int y1, int x2, int y2) : x1(x1), y1(y1), x2(x2), y2(y2) {}
 // Load camera calibration data from a .yml file
 void XYZ::loadCalibrationData(const std::string &calibrationFile) {
     cv::FileStorage fs(calibrationFile, cv::FileStorage::READ);
+    std :: cout << "Calibration file: " << calibrationFile << std::endl;
 
     if (!fs.isOpened()) {
         throw std::runtime_error("Failed to open calibration file: " + calibrationFile);

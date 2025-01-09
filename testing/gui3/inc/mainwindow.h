@@ -4,6 +4,12 @@
 #include <QMainWindow>
 #include <opencv2/opencv.hpp>
 #include "CameraThread.h"
+#include "../inc/ui_mainwindow.h" 
+#include <QImage>
+#include <QPixmap>
+#include <opencv2/opencv.hpp>
+#include <algorithm>
+#include <tuple>
 
 class CameraThread; // Forward declaration
 
@@ -31,10 +37,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    
     CameraThread *cameraThread;
+   
 };
 
-std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px);
+extern int image_height;
+extern int image_width;
 
 #endif // MAINWINDOW_H

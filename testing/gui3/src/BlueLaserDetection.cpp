@@ -103,6 +103,7 @@ cv::Mat LaserDetection::plotOptimalLine(int& x1, int& y1, int& x2, int& y2, int 
 
 // Main function for laser detection
 cv::Mat LaserDetection::laserDetection(int& x1, int& y1, int& x2, int& y2) {
+    std::cout<<"Laser detection is runnig"<<std::endl;
     cv::Mat hsvFrame, hsvBlur, blueMask, blueRegions;
     cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
     cv::bilateralFilter(hsvFrame, hsvBlur, 2, 90, 90);
