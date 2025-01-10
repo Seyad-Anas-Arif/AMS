@@ -161,6 +161,8 @@ public:
         settings_comboBox = new QComboBox(mainGuiWindow);
         settings_comboBox->setObjectName(QString::fromUtf8("settings_comboBox"));
         settings_comboBox->setGeometry(QRect(660, 510, 86, 25));
+        // settings_comboBox->setCurrentIndex(0);
+        settings_comboBox->addItem("custom");
         label_4 = new QLabel(mainGuiWindow);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(510, 100, 311, 17));
@@ -171,7 +173,7 @@ public:
         y_start_slider->setOrientation(Qt::Vertical);
         exposure_spinbox = new QSpinBox(mainGuiWindow);
         exposure_spinbox->setObjectName(QString::fromUtf8("exposure_spinbox"));
-        exposure_spinbox->setGeometry(QRect(660, 470, 44, 26));
+        exposure_spinbox->setGeometry(QRect(660, 470, 50, 26));
         exposure_spinbox->setMaximum(600);
         exposure_spinbox->setSingleStep(50);
         exposure_spinbox->setValue(100);
@@ -224,7 +226,7 @@ public:
         Default_btn->setToolTip(QCoreApplication::translate("MainWindow", "Reset to default settings", nullptr));
         save_btn->setToolTip(QCoreApplication::translate("MainWindow", "Save current settings", nullptr));
         apply_btn->setToolTip(QCoreApplication::translate("MainWindow", "Apply current settings", nullptr));
-        run_btn->setToolTip(QCoreApplication::translate("MainWindow", "Run the process", nullptr));
+        run_btn->setToolTip(QCoreApplication::translate("MainWindow", "to see result", nullptr));
         exit_btn->setToolTip(QCoreApplication::translate("MainWindow", "Exit the application", nullptr));
         info_btn->setToolTip(QCoreApplication::translate("MainWindow", "Show information", nullptr));
         delete_btn->setToolTip(QCoreApplication::translate("MainWindow", "Delete setting", nullptr));

@@ -1,14 +1,9 @@
-
 #include "../inc/CameraThread.h"
-
-  
+#include <iostream>
 
 CameraThread::CameraThread()
-    : running(true),
-      target_height(240),
-      target_width(320),
-      exposure_value(-5),
-      offset_line_value(130) {
+    : running(true), target_height(240), target_width(320), exposure_value(-5), offset_line_value(130) {
+    // Initialization code can go here if needed
 }
 
 CameraThread::~CameraThread() {
@@ -21,12 +16,10 @@ void CameraThread::run() {
         std::cerr << "Error: Could not open the camera." << std::endl;
         return;
     }
-    int simage_height = int(cap.get(cv::CAP_PROP_FRAME_HEIGHT));
-    image_height = simage_height;
-    int simage_width = int(cap.get(cv::CAP_PROP_FRAME_WIDTH));
-    image_width = simage_width;
-    std::cout << "Camera resolution: " << simage_width << "x" << simage_height << std::endl;
-    
+
+    image_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT));  // Get actual frame height
+    image_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));    // Get actual frame width
+
     cap.set(cv::CAP_PROP_FRAME_WIDTH, target_width);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, target_height);
     cap.set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
@@ -72,17 +65,17 @@ void CameraThread::processFrame(cv::Mat &frame) {
     cv::Mat laserDetectedImage = laserDetector.laserDetection(x1, y1, x2, y2);
 
     // Combine overlays
-    std::cout <<"combine overloding is started"<<std::endl; 
+    std::cout <<"combine overloading is started"<<std::endl; 
     cv::Mat feed = frame.clone();
-    laser_detected.copyTo(feed(Rect(0, 0, roi.cols, roi.rows)));
-    cv::Mat mask, mask_inv, backgroundPart, overlayPart;
+    laserDetected.copyTo(feed(cv::Rect(0, 0, roi.cols, roi.rows)));
+    cv::Mat mask, mask_inv, backgroundPart, overlayPart, result;
     cv::inRange(laserDetected, cv::Scalar(0, 0, 0), cv::Scalar(0, 0, 0), mask);
     cv::bitwise_not(mask, mask_inv);
     cv::bitwise_and(frame, frame, backgroundPart, mask);
     cv::bitwise_and(feed, feed, overlayPart, mask_inv);
     cv::add(backgroundPart, overlayPart, result);
-    std::cout <<"combine overloding is completed"<<std::endl;
-     Mat frame_region, inverse_not_roi, background_region, result_feed;
+    std::cout <<"combine overloading is completed"<<std::endl;
+    cv::Mat frame_region, inverse_not_roi, background_region, result_feed;
     bitwise_and(frame, frame, frame_region, not_roi);
 
     // Invert the ROI mask
@@ -90,7 +83,7 @@ void CameraThread::processFrame(cv::Mat &frame) {
     cv::bitwise_and(result, result, background_region, inverse_not_roi);
     cv::add(frame_region, background_region, result_feed);
     // Draw a line on the result feed
-    cv::line(result_feed, Point(px, py), Point(bottom_px, bottom_line_y), Scalar(150, 0, 0), 3);
+    cv::line(result_feed, cv::Point(px, py), cv::Point(bottom_px, bottom_line_y), cv::Scalar(150, 0, 0), 3);
 
 
     // Generate the QImage for main feed
