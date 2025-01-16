@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <utility>
+#include <QDebug>
 
 class RegionOfInterest {
 private:

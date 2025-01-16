@@ -13,7 +13,7 @@ RegionOfInterest::RegionOfInterest(cv::Mat frame, int line_position_y_start, int
 
 std::vector<std::pair<int, int>> RegionOfInterest::calculateExtendedIntersections(int start_x, int start_y, int end_x, int end_y) {
     std::vector<std::pair<int, int>> intersections;
-    std::cout<<"region of interst is running"<<std::endl;
+   qDebug() << "calculating Extend INtersections   ";
     double slope = (end_x != start_x) ? static_cast<double>(end_y - start_y) / (end_x - start_x) : std::numeric_limits<double>::infinity();
 
     if (slope != std::numeric_limits<double>::infinity()) {
@@ -40,11 +40,11 @@ std::vector<std::pair<int, int>> RegionOfInterest::calculateExtendedIntersection
         intersections.emplace_back(start_x + offset, 0);
         intersections.emplace_back(start_x + offset, image_height - 1);
     }
-    std::cout<<"region of intressed is completed"<<std::endl;
     return intersections;
 }
 
 std::pair<int, int> RegionOfInterest::findIntersection(const std::pair<int, int>& point1, const std::pair<int, int>& point2) {
+    qDebug() << "Finding  inter scetion";
     const double epsilon = 1e-6;
 
     int x1 = point1.first, y1 = point1.second;
@@ -77,6 +77,7 @@ std::pair<int, int> RegionOfInterest::findIntersection(const std::pair<int, int>
 }
 
 std::tuple<cv::Mat, cv::Mat, std::pair<int, int>, std::pair<int, int>> RegionOfInterest::ROI() {
+    qDebug() << "ROI";
     cv::Mat img = frame.clone();
     cv::Mat mask = cv::Mat::zeros(image_height, image_width, CV_8U);
 

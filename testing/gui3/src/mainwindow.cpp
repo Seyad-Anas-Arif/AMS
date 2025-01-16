@@ -1,4 +1,5 @@
 #include "../inc/mainwindow.h"
+#include "../inc/SharedVariables.h"
 
 using namespace std;
 
@@ -203,26 +204,31 @@ void MainWindow::updateOffsetLineValue(int value)
 }
 void MainWindow::onXStartSliderChanged(int value)
 {
+    qDebug() << "x start slider value changed:" << value;
     // Set the X-Start value
 }
 
 void MainWindow::onXEndSliderChanged(int value)
 {
+    qDebug() << "x start slider value changed:" << value;
     // Set the X-End value
 }
 
 void MainWindow::onYStartSliderChanged(int value)
 {
+    qDebug() << "y start slider value changed:" << value;
     // Set the Y-Start value
 }
 
 void MainWindow::onYEndSliderChanged(int value)
 {
+    qDebug() << "y end slider value changed:" << value;
     // Set the Y-End value
 }
 
 void MainWindow::onOffsetSliderChanged(int value)
 {
+    qDebug() << "off set slider value changed:" << value;
     // Set the offset value
 }
 
@@ -253,6 +259,7 @@ void MainWindow::onSettingsComboBoxChanged(int index)
 }
 void MainWindow::restoreDefaultValues()
 {
+    qDebug() << "restoring default values";
     // y_axis_start_slider->setValue(image_height - default_line_position_y_start);
     // y_axis_end_slider->setValue(image_height - default_line_position_y_end);
     // point_position_slider->setValue(default_point_position);

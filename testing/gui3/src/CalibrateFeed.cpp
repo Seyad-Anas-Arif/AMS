@@ -4,6 +4,7 @@ CalibrateFeed::CalibrateFeed(const cv::Mat& inputFrame) : frame(inputFrame) {}
 
 cv::Mat CalibrateFeed::calibrate(const std::string& calibrationFilePath) {
     // Load camera calibration data from the YAML file
+    qDebug() << "Calibrating the feed";
     cv::FileStorage fs(calibrationFilePath, cv::FileStorage::READ);
     if (!fs.isOpened()) {
         throw std::runtime_error("Could not open calibration file: " + calibrationFilePath);

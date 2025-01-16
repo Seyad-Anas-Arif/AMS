@@ -10,11 +10,13 @@ SOURCES += src/main.cpp \
            src/CameraThread.cpp \
            src/CalibrateFeed.cpp \
            src/RegionOfInterest.cpp \
-           src/BlueLaserDetection.cpp
+           src/BlueLaserDetection.cpp \
+           src/SharedVariables.cpp
 
 HEADERS += inc/mainwindow.h \
            inc/ui_mainwindow.h \
-           inc/CameraThread.h
+           inc/CameraThread.h \
+           inc/SharedVariables.h
 
 # OpenCV configuration using pkg-config
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio \

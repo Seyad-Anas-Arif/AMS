@@ -1,132 +1,157 @@
 #include "../inc/BlueLaserDetection.h"
-#include <cmath>
-#include <tuple>
-#include <algorithm>
-#include <iostream>
 
-// Constructor
-LaserDetection::LaserDetection(const cv::Mat& frame) : frame(frame) {
+LaserDetection::LaserDetection(const cv::Mat& frame) : frame(frame), optimal_line(), laser() {
     if (frame.empty()) {
         throw std::invalid_argument("Image not found or unable to load.");
     }
 }
 
-// Function to select the optimal line
-std::vector<cv::Vec4i> LaserDetection::selectOptimalLine(const std::vector<cv::Vec4i>& lines) {
-    if (lines.empty()) return {};
+cv::Vec4i LaserDetection::selectOptimalLine(const std::vector<cv::Vec4i>& lines) {
+   qDebug() << "Selecting optimal line.";
+    if (lines.empty()) {
+        return cv::Vec4i();
+    }
 
     int height = frame.rows;
     int width = frame.cols;
-
-    std::vector<std::tuple<cv::Vec4i, double, double>> anglesLengths;
+    std::vector<std::tuple<cv::Vec4i, double, double>> angles_lengths;
 
     for (const auto& line : lines) {
         int x1 = line[0], y1 = line[1], x2 = line[2], y2 = line[3];
 
-        // Ignore lines near the border
-        if (x1 < BORDER_THRESHOLD || x2 < BORDER_THRESHOLD || x1 > width - BORDER_THRESHOLD || 
-            x2 > width - BORDER_THRESHOLD || y1 < BORDER_THRESHOLD || y2 < BORDER_THRESHOLD || 
-            y1 > height - BORDER_THRESHOLD || y2 > height - BORDER_THRESHOLD) {
+        if (x1 < BORDER_THRESHOLD || x2 < BORDER_THRESHOLD || x1 > width - BORDER_THRESHOLD || x2 > width - BORDER_THRESHOLD ||
+            y1 < BORDER_THRESHOLD || y2 < BORDER_THRESHOLD || y1 > height - BORDER_THRESHOLD || y2 > height - BORDER_THRESHOLD) {
             continue;
         }
 
         double angle = atan2(y2 - y1, x2 - x1);
         double length = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-        anglesLengths.emplace_back(line, angle, length);
+        angles_lengths.emplace_back(line, angle, length);
     }
 
-    if (anglesLengths.empty()) return {};
-
-    // Determine the most common angle
-    std::map<double, int> angleCounts;
-    for (const auto& [line, angle, length] : anglesLengths) {
-        angleCounts[angle]++;
+    if (angles_lengths.empty()) {
+        return cv::Vec4i();
     }
 
-    double commonAngle = std::max_element(angleCounts.begin(), angleCounts.end(),
-                                          [](const auto& a, const auto& b) { return a.second < b.second; })->first;
+    std::map<double, int> angle_counts;
+    for (const auto& [line, angle, length] : angles_lengths) {
+        angle_counts[angle]++;
+    }
 
-    // Find the longest line with the most common angle
-    cv::Vec4i longestLine;
-    double maxLength = 0.0;
-    for (const auto& [line, angle, length] : anglesLengths) {
-        if (angle == commonAngle && length > maxLength) {
-            longestLine = line;
-            maxLength = length;
+    auto most_common_angle = std::max_element(angle_counts.begin(), angle_counts.end(), [](const auto& a, const auto& b) {
+        return a.second < b.second;
+    })->first;
+
+    cv::Vec4i longest_line;
+    double max_length = 0;
+    for (const auto& [line, angle, length] : angles_lengths) {
+        if (angle == most_common_angle && length > max_length) {
+            longest_line = line;
+            max_length = length;
         }
     }
 
-    return {longestLine};
+    return longest_line;
 }
 
-// Function to extend line to image boundaries
-std::tuple<int, int, int, int> LaserDetection::extendLineToBoundaries(const cv::Vec4i& line, const cv::Size& imageShape, int midpoint) {
+cv::Vec4i LaserDetection::extendLineToBoundaries(const cv::Vec4i& line, const cv::Size& image_size, int midpoint) {
+    qDebug() << "Extending line to boundaries.";
+    if (line == cv::Vec4i()) {
+        return cv::Vec4i();
+    }
+
     int x1 = line[0], y1 = line[1], x2 = line[2], y2 = line[3];
-    int height = imageShape.height;
-    int width = imageShape.width;
+    int height = image_size.height;
+    int width = image_size.width;
 
     if (y1 == y2) {
-        return {0, y1 + midpoint, width, y2 + midpoint};
+        return cv::Vec4i(0, y1 + midpoint, width, y2 + midpoint);
     } else if (x1 == x2) {
-        return {x1, 0, x2, height};
+        return cv::Vec4i(x1, 0, x2, height);
     } else {
         double slope = static_cast<double>(y2 - y1) / (x2 - x1);
         double intercept = y1 - slope * x1;
+
         int new_x1 = 0;
         int new_y1 = static_cast<int>(slope * new_x1 + intercept);
         int new_x2 = width;
         int new_y2 = static_cast<int>(slope * new_x2 + intercept);
-        return {new_x1, new_y1 + midpoint, new_x2, new_y2 + midpoint};
+
+        return cv::Vec4i(new_x1, new_y1 + midpoint, new_x2, new_y2 + midpoint);
     }
 }
 
-// Function to plot the optimal line
-cv::Mat LaserDetection::plotOptimalLine(int& x1, int& y1, int& x2, int& y2, int midpoint) {
+std::tuple<cv::Mat, int, int, int, int> LaserDetection::plotOptimalLine(int midpoint) {
+    qDebug() << "Plotting optimal line.";
     std::vector<cv::Vec4i> lines;
     cv::HoughLinesP(laser, lines, 1, CV_PI / 180, 50, 0, 100);
 
-    if (lines.empty()) return frame;
-
-    optimalLine = selectOptimalLine(lines);
-    if (optimalLine.empty()) return frame;
-
-    auto [new_x1, new_y1, new_x2, new_y2] = extendLineToBoundaries(optimalLine[0], frame.size(), midpoint);
-
-    cv::line(frame, cv::Point(new_x1, new_y1), cv::Point(new_x2, new_y2), cv::Scalar(0, 0, 150), 3);
-    x1 = new_x1;
-    y1 = new_y1;
-    x2 = new_x2;
-    y2 = new_y2;
-
-    return frame;
-}
-
-// Main function for laser detection
-cv::Mat LaserDetection::laserDetection(int& x1, int& y1, int& x2, int& y2) {
-    std::cout<<"Laser detection is runnig"<<std::endl;
-    cv::Mat hsvFrame, hsvBlur, blueMask, blueRegions;
-    cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
-    cv::bilateralFilter(hsvFrame, hsvBlur, 2, 90, 90);
-
-    cv::Scalar lowerBlue(90, 90, 40), upperBlue(125, 255, 255);
-    cv::inRange(hsvBlur, lowerBlue, upperBlue, blueMask);
-
-    cv::bitwise_and(frame, frame, blueRegions, blueMask);
-    cv::Mat b, g, r;
-    cv::split(blueRegions, std::vector<cv::Mat>{b, g, r});
-
-    cv::Mat grayFrame = b;
-    cv::Mat rowIntensityMask = cv::Mat::zeros(grayFrame.size(), CV_8U);
-    int height = grayFrame.rows;
-
-    for (int i = 0; i < height; ++i) {
-        double minVal, maxVal;
-        cv::Point minLoc, maxLoc;
-        cv::minMaxLoc(grayFrame.row(i), &minVal, &maxVal, &minLoc, &maxLoc);
-
-        if (maxVal > 0) rowIntensityMask.at<uchar>(i, maxLoc.x) = static_cast<uchar>(maxVal);
+    if (lines.empty()) {
+        return {frame, -1, -1, -1, -1};
     }
 
-    laser = rowIntensityMask;
-    return plotOptimalLine(x1, y1, x2, y2);
+    cv::Vec4i optimal_line = selectOptimalLine(lines);
+    this->optimal_line = optimal_line;
+    cv::Vec4i extended_line = extendLineToBoundaries(optimal_line, frame.size(), midpoint);
+
+    if (extended_line != cv::Vec4i()) {
+        cv::line(frame, cv::Point(optimal_line[0], optimal_line[1]),
+                 cv::Point(optimal_line[2], optimal_line[3]), cv::Scalar(0, 0, 150), 2);
+        return {frame, optimal_line[0], optimal_line[1], optimal_line[2], optimal_line[3]};
+    }
+    return {frame, -1, -1, -1, -1};
+}
+
+std::tuple<cv::Mat, int, int, int, int> LaserDetection::laserDetection() {
+    qDebug() << "Laser detection started.";
+    cv::Mat hsv_frame;
+    cv::cvtColor(frame, hsv_frame, cv::COLOR_BGR2HSV);
+
+    cv::Mat hsv_blur;
+    cv::bilateralFilter(hsv_frame, hsv_blur, 2, 90, 90);
+
+    cv::Scalar lower_blue(90, 90, 40);
+    cv::Scalar upper_blue(125, 255, 255);
+    cv::Mat blue_mask;
+    cv::inRange(hsv_blur, lower_blue, upper_blue, blue_mask);
+
+    cv::Mat blue_regions;
+    cv::bitwise_and(frame, frame, blue_regions, blue_mask);
+
+    std::vector<cv::Mat> channels;
+    cv::split(blue_regions, channels);
+    cv::Mat gray_frame = channels[0];
+
+    cv::Mat row_intensity_mask = cv::Mat::zeros(gray_frame.size(), CV_8U);
+
+    for (int i = 0; i < gray_frame.rows; ++i) {
+        double max_intensity;
+        cv::minMaxLoc(gray_frame.row(i), nullptr, &max_intensity);
+
+        cv::Mat mask;
+        cv::compare(gray_frame.row(i), max_intensity, mask, cv::CMP_EQ);
+        row_intensity_mask.row(i).setTo(max_intensity, mask);
+    }
+
+    cv::Mat com_mask = cv::Mat::zeros(gray_frame.size(), CV_8U);
+    for (int i = 0; i < row_intensity_mask.rows; ++i) {
+        auto row = row_intensity_mask.row(i);
+
+        std::vector<int> white_indices;
+        for (int j = 0; j < row.cols; ++j) {
+            if (row.at<uchar>(0, j) > 0) {
+                white_indices.push_back(j);
+            }
+        }
+
+        if (!white_indices.empty()) {
+            int a = white_indices.front();
+            int b = white_indices.back();
+            int com = (a + b) / 2;
+            com_mask.at<uchar>(i, com) = 255;
+        }
+    }
+
+    laser = com_mask;
+    return plotOptimalLine();
 }

@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 #include <opencv2/opencv.hpp>
-#include "CameraThread.h"
-#include "../inc/ui_mainwindow.h" 
 #include <QImage>
 #include <QPixmap>
 #include <QMessageBox>
@@ -15,6 +13,9 @@
 #include <opencv2/opencv.hpp>
 #include <algorithm>
 #include <tuple>
+
+#include "CameraThread.h"
+#include "ui_mainwindow.h" 
 
 class CameraThread; // Forward declaration
 

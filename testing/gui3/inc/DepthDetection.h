@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <string>
+#include <QDebug>
 
 class XYZ {
 public:
