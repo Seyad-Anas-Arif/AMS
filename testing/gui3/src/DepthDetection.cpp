@@ -16,7 +16,7 @@ XYZ::XYZ(int x1, int y1, int x2, int y2) : x1(x1), y1(y1), x2(x2), y2(y2) {}
 // Load camera calibration data from a .yml file
 void XYZ::loadCalibrationData(const std::string &calibrationFile) {
     cv::FileStorage fs(calibrationFile, cv::FileStorage::READ);
-    qDebug() << "loading calibration data";
+   // qDebug() << "loading calibration data";
 
     if (!fs.isOpened()) {
         throw std::runtime_error("Failed to open calibration file: " + calibrationFile);
@@ -42,7 +42,7 @@ void XYZ::loadCalibrationData(const std::string &calibrationFile) {
 
 // Bresenham's algorithm to generate pixel coordinates along a line
 std::vector<cv::Point> XYZ::bresenhamLine(int x1, int y1, int x2, int y2) {
-    qDebug() << "Bresenham line algorithm";
+    //qDebug() << "Bresenham line algorithm";
     std::vector<cv::Point> points;
 
     int dx = abs(x2 - x1);
@@ -72,7 +72,7 @@ std::vector<cv::Point> XYZ::bresenhamLine(int x1, int y1, int x2, int y2) {
 
 // Calculate 3D depth
 std::vector<cv::Point3f> XYZ::depth() {
-    qDebug() << "Calculating depth";
+    //qDebug() << "Calculating depth";
     auto laserPixelCoordinates = bresenhamLine(x1, y1, x2, y2);
     std::vector<cv::Point3f> laserPoints3D;
 

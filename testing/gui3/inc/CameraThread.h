@@ -9,7 +9,9 @@
 #include <string>
 #include <iostream>
 #include <QDebug>
+#include <QSlider>
 
+#include "ui_mainwindow.h"
 #include "CalibrateFeed.h"     
 #include "mainwindow.h"    
 #include "RegionOfInterest.h"    
@@ -59,11 +61,11 @@ private:
     //  default_bottom_point_position = bottom_point_position;
 
 
-    cv::VideoCapture cap;
-
     void processFrame(cv::Mat &frame);
     std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px);
+    Ui::MainWindow *ui;
 
 };
+
 
 #endif // CAMERATHREAD_H

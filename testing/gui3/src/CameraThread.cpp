@@ -3,7 +3,7 @@
 #include "../inc/SharedVariables.h"
 
 CameraThread::CameraThread()
-    : running(true), target_height(240), target_width(320), exposure_value(-5), offset_line_value(130)
+    : running(true), target_height(240), target_width(320), exposure_value(100), offset_line_value(130)
 {
     // Initialization code can go here if needed
 }
@@ -15,16 +15,16 @@ CameraThread::~CameraThread()
 
 void CameraThread::run()
 {
-    cap.open(0, cv::CAP_V4L2);
+    qDebug() <<"image height: "<<image_height<<" image width: "<<image_width;
+   // cap.open(0, cv::CAP_V4L2);
     if (!cap.isOpened())
     {
         std::cerr << "Error: Could not open the camera." << std::endl;
         return;
     }
-
-    image_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); // Get actual frame height
-    image_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));   // Get actual frame width
-
+    // image_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); // Get actual frame height
+    // image_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));   // Get actual frame width
+    
     cap.set(cv::CAP_PROP_FRAME_WIDTH, target_width);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, target_height);
     cap.set(cv::CAP_PROP_AUTO_EXPOSURE, 1);
@@ -50,15 +50,15 @@ void CameraThread::run()
 
 void CameraThread::processFrame(cv::Mat &frame)
 {
-    qDebug() << "Processing frame";
+   // qDebug() << "Processing frame";
     // Create calibrator and process the frame
     CalibrateFeed calibrator(frame); // Replace with actual constructor
     frame = calibrator.calibrate("data/camera_calibration.yml");
-    qDebug() << "image size: " << image_height << "X" << image_width;
+    //qDebug() << "image size: " << image_height << "X" << image_width;
 
     cv::Mat userFeed, roi, not_roi;
-    int y_start = image_height/2 , y_end =image_height/2, px =image_width/2 , py =image_height/2 , bottom_px = image_width/2  , p_position =image_width/2 , bottom_p_position = image_width/2; ;
-   
+    int y_start = image_height/2 , y_end =image_height/2, px , py , bottom_px = image_width/2 , p_position =image_width/2 , bottom_p_position = image_height; 
+
 
     std::tie(userFeed, y_start, y_end, p_position, bottom_p_position, px, py, bottom_px) =
         UsersLiveFeed(frame, y_start, y_end, p_position, bottom_p_position, px, py, bottom_px);
@@ -69,7 +69,7 @@ void CameraThread::processFrame(cv::Mat &frame)
 //------------------------------------------------------------------------------------------------------
   //  cv::line(userFeed, cv::Point(0, line_position_y_start), cv::Point(image_width - 1, line_position_y_end), cv::Scalar(255, 255, 255), line_thickness);
 
-    qDebug() <<"px: " << px << " py: " << py << " y Strat: " << y_start << " y end : " << y_end << " bottom px: " << bottom_px << " bottom line y: " << bottom_line_y;
+    //qDebug() <<"px: " << px << " py: " << py << " y Strat: " << y_start << " y end : " << y_end << " bottom px: " << bottom_px << " bottom line y: " << bottom_line_y;
     cv::Mat resizedUserFeed;
     cv::resize(userFeed, resizedUserFeed, cv::Size(target_width, target_height));
     QImage mainImage(resizedUserFeed.data, resizedUserFeed.cols, resizedUserFeed.rows, resizedUserFeed.step, QImage::Format_RGB888);
@@ -84,7 +84,7 @@ void CameraThread::processFrame(cv::Mat &frame)
     
     // Combine overlays
 
-    qDebug() << "combine overloading is started";
+   // qDebug() << "combine overloading is started";
     cv::Mat feed = frame.clone();
     if (roi.cols > feed.cols || roi.rows > feed.rows)
     {
@@ -110,7 +110,7 @@ void CameraThread::processFrame(cv::Mat &frame)
     CV_Assert(mask.type() == CV_8U);
     CV_Assert(not_roi.type() == CV_8U);
 
-    qDebug() << "combine overloading is completed";
+   // qDebug() << "combine overloading is completed";
     cv::Mat frame_region, inverse_not_roi, background_region, result_feed;
     bitwise_and(frame, frame, frame_region, not_roi);
 
@@ -146,19 +146,19 @@ void CameraThread::stop()
 
 void CameraThread::updateExposure(int value)
 {
-    qDebug() << "Updating exposure";
+    //qDebug() << "Updating exposure";
     exposure_value = value;
 }
 
 void CameraThread::updateOffsetLineValue(int value)
 {
-    qDebug() << "updating offset line value";
+    //qDebug() << "updating offset line value";
     offset_line_value = value;
 }
 
 std::tuple<cv::Mat, int, int, int, int, int, int, int> CameraThread::UsersLiveFeed(const cv::Mat &frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px)
 {
-    qDebug() << "Users live feed is runnig";
+    //qDebug() << "Users live feed is runnig";
     cv::Mat img = frame.clone();
 
     // Draw horizontal line

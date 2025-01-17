@@ -114,7 +114,7 @@ public:
         X_end_slider = new QSlider(mainGuiWindow);
         X_end_slider->setObjectName(QString::fromUtf8("X_end_slider"));
         X_end_slider->setGeometry(QRect(660, 380, 160, 16));
-        X_end_slider->setValue(50);
+        // X_end_slider->setValue(50);
         X_end_slider->setOrientation(Qt::Horizontal);
         label_9 = new QLabel(mainGuiWindow);
         label_9->setObjectName(QString::fromUtf8("label_9"));
@@ -148,12 +148,12 @@ public:
         x_start_slider = new QSlider(mainGuiWindow);
         x_start_slider->setObjectName(QString::fromUtf8("x_start_slider"));
         x_start_slider->setGeometry(QRect(660, 340, 160, 16));
-        x_start_slider->setValue(50);
+        // x_start_slider->setValue(50);
         x_start_slider->setOrientation(Qt::Horizontal);
         y_end_slider = new QSlider(mainGuiWindow);
         y_end_slider->setObjectName(QString::fromUtf8("y_end_slider"));
         y_end_slider->setGeometry(QRect(790, 140, 16, 121));
-        y_end_slider->setValue(50);
+        // y_end_slider->setValue(50);
         y_end_slider->setOrientation(Qt::Vertical);
         label_7 = new QLabel(mainGuiWindow);
         label_7->setObjectName(QString::fromUtf8("label_7"));
@@ -169,7 +169,7 @@ public:
         y_start_slider = new QSlider(mainGuiWindow);
         y_start_slider->setObjectName(QString::fromUtf8("y_start_slider"));
         y_start_slider->setGeometry(QRect(570, 140, 16, 121));
-        y_start_slider->setValue(50);
+        // y_start_slider->setValue(50);
         y_start_slider->setOrientation(Qt::Vertical);
         exposure_spinbox = new QSpinBox(mainGuiWindow);
         exposure_spinbox->setObjectName(QString::fromUtf8("exposure_spinbox"));

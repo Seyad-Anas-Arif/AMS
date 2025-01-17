@@ -3,6 +3,8 @@
 
 using namespace std;
 
+
+
 QMap<QString, QMap<QString, int>> saved_configs;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
                                           ui(new Ui::MainWindow),
@@ -10,13 +12,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 {
     ui->setupUi(this);
 
+    cap.open(0, cv::CAP_V4L2);
+    image_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); // Get actual frame height
+    image_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));   // Get actual frame width
+
+
     // Connect signals from CameraThread to slots in MainWindow
     connect(cameraThread, &CameraThread::imageMain, this, &MainWindow::updateMainImage);
     connect(cameraThread, &CameraThread::imageResult, this, &MainWindow::updateMainImage);
 
-    // window switch buttons
-    connect(ui->run_btn, &QPushButton::clicked, this, &MainWindow::onRunButtonClicked);
-    connect(ui->rw_back_btn, &QPushButton::clicked, this, &MainWindow::rwBackButtonClicked);
+    
 
     connect(ui->Developer_btn, &QPushButton::clicked, this, &MainWindow::onDeveloperbuttonClicked);
     connect(ui->dw_back_btn, &QPushButton::clicked, this, &MainWindow::dwBackButtonClicked);
@@ -33,9 +38,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
      connect(ui->settings_comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSettingsComboBoxChanged);
     connect(ui->exposure_spinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::updateExposure);
     connect(ui->offset_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::updateOffsetLineValue);
+    connect(ui->y_start_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onYStartSliderChanged);
+    connect(ui->y_end_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onYEndSliderChanged);
+    connect(ui->x_start_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onXStartSliderChanged);
+    connect(ui->X_end_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onXEndSliderChanged);
+
+
+
+    // window switch buttons
+    connect(ui->run_btn, &QPushButton::clicked, this, &MainWindow::onRunButtonClicked);
+    connect(ui->rw_back_btn, &QPushButton::clicked, this, &MainWindow::rwBackButtonClicked);
 
     // Start the camera thread
     cameraThread->start();
+
+    configureSlider(ui->y_start_slider, 0, image_height, image_height/2);
+    configureSlider(ui->y_end_slider, 0, image_height, image_height/2);
+    configureSlider(ui->x_start_slider, 0, image_width, image_width/2);
+    configureSlider(ui->X_end_slider, 0, image_width, image_width/2);
+   
 }
 
 MainWindow::~MainWindow()
@@ -50,7 +71,6 @@ void MainWindow::updateMainImage(const QImage &frame)
 {
     ui->Display_lable->setPixmap(QPixmap::fromImage(frame).scaled(ui->Display_lable->size(), Qt::KeepAspectRatio));
 }
-
 void MainWindow::updateResultImage(const QImage &frame)
 {
     // Update the result image label (if you have one)
@@ -90,7 +110,7 @@ void MainWindow::onSaveButtonClicked()
     }
 }
 
-void MainWindow::onApplyButtontoggled(bool checked)
+void MainWindow::onApplyButtontoggled()
 {
     if (ui->apply_btn->text() == "Apply")
     {
@@ -100,7 +120,7 @@ void MainWindow::onApplyButtontoggled(bool checked)
         ui->Default_btn->setEnabled(false);
         ui->save_btn->setEnabled(false);
         ui->settings_comboBox->setEnabled(false);
-         setSlidersEditable(false);
+        setSlidersEditable(false);
     }
     else
     {
@@ -109,6 +129,7 @@ void MainWindow::onApplyButtontoggled(bool checked)
         ui->Default_btn->setEnabled(true);
         ui->save_btn->setEnabled(true);
         ui->settings_comboBox->setEnabled(true);
+         setSlidersEditable(true);
     }
 }
 
@@ -193,45 +214,57 @@ void MainWindow::dwBackButtonClicked()
 }
 
 //------------------------------------Slider and ComboBox Actions------------------------------------//
+
+void MainWindow::configureSlider(QSlider *slider, int min, int max, int initialValue) {
+    qDebug() << "Configuring slider with min:" << min << "max:" << max << "initial:" << initialValue;
+    if (slider) {
+        slider->setRange(min, max);
+        slider->setValue(initialValue);
+    }
+}
 void MainWindow::updateExposure(int value)
 {
     cameraThread->updateExposure(value);
 }
-
 void MainWindow::updateOffsetLineValue(int value)
 {
     cameraThread->updateOffsetLineValue(value);
 }
 void MainWindow::onXStartSliderChanged(int value)
 {
+    point_position =image_width - value;
+    X_of_vt = image_width - value;
     qDebug() << "x start slider value changed:" << value;
+
     // Set the X-Start value
 }
-
 void MainWindow::onXEndSliderChanged(int value)
 {
+    X_of_vb = image_width - value;
+    bottom_point_position = image_width - value;
     qDebug() << "x start slider value changed:" << value;
     // Set the X-End value
 }
-
 void MainWindow::onYStartSliderChanged(int value)
 {
+    line_position_y_start = image_height - value;
+    Y_of_hl = image_height - value;
     qDebug() << "y start slider value changed:" << value;
     // Set the Y-Start value
 }
-
 void MainWindow::onYEndSliderChanged(int value)
 {
+    line_position_y_end = image_height - value;
+    Y_of_hr = image_height - value;
     qDebug() << "y end slider value changed:" << value;
     // Set the Y-End value
 }
-
 void MainWindow::onOffsetSliderChanged(int value)
 {
+    offset_line_value = value;
     qDebug() << "off set slider value changed:" << value;
     // Set the offset value
 }
-
 void MainWindow::onSettingsComboBoxChanged(int index)
 {
     qDebug() << "Selected index:" << index;
@@ -266,7 +299,6 @@ void MainWindow::restoreDefaultValues()
     // bottom_point_position_slider->setValue(default_bottom_point_position);
     // combo_box->setCurrentIndex(0);
 }
-
 void MainWindow::setSlidersEditable(bool editable)
 {
     ui->y_start_slider->setEnabled(editable);

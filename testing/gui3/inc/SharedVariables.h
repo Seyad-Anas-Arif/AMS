@@ -1,5 +1,6 @@
 #ifndef SHAREDVARIABLES_H
 #define SHAREDVARIABLES_H
+#include <opencv2/opencv.hpp>
 
 extern int image_height;
 extern int image_width;
@@ -16,4 +17,17 @@ extern int point_position ;
 extern int bottom_line_y ;
 extern int bottom_point_position ;
 extern int line_thickness;
+extern int offset_line_value;
+
+extern int X_of_vb;
+extern int Y_of_vb;
+extern int X_of_vt;
+extern int Y_of_vt;
+extern int X_of_hl;
+extern int Y_of_hl;
+extern int X_of_hr;
+extern int Y_of_hr;
+
+
+extern cv::VideoCapture cap;
 #endif // SHAREDVARIABLES_H

@@ -13,6 +13,7 @@
 #include <opencv2/opencv.hpp>
 #include <algorithm>
 #include <tuple>
+#include <QSlider>
 
 #include "CameraThread.h"
 #include "ui_mainwindow.h" 
@@ -30,6 +31,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void configureSlider(QSlider *slider, int min, int max, int initialValue);
+    
 
 private slots:
     void updateMainImage(const QImage &frame);
@@ -39,7 +42,7 @@ private slots:
     //Buttions Actions
     void onDefaultButtonClicked();
     void onSaveButtonClicked();
-    void onApplyButtontoggled(bool checked);
+    void onApplyButtontoggled();
     void onRunButtonClicked();
     void onDeveloperbuttonClicked();
     void rwBackButtonClicked();
@@ -47,6 +50,7 @@ private slots:
     void onExitButtonClicked();
     void onDeleteButtonClicked();
     //change the value of 0the sliders and combobox
+    
     void onXStartSliderChanged(int value);
     void onXEndSliderChanged(int value);
     void onYStartSliderChanged(int value);
@@ -58,6 +62,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     CameraThread *cameraThread;
+        
   
    
 };
