@@ -19,6 +19,11 @@ extern int bottom_point_position ;
 extern int line_thickness;
 extern int offset_line_value;
 
+extern int bottom_px;
+extern int py;
+extern int px;
+
+
 extern int X_of_vb;
 extern int Y_of_vb;
 extern int X_of_vt;

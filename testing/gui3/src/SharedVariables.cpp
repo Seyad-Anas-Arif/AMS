@@ -20,6 +20,10 @@ int default_bottom_point_position = bottom_point_position;
 
  cv::VideoCapture cap;
 
+int bottom_px;
+int py = image_height / 2;
+int px = image_width / 2;
+
 //creating varible for  drwaing line in frame
 //x1 is bottom point of vertical line (where y is maximum)
 int X_of_vb = image_width / 2;

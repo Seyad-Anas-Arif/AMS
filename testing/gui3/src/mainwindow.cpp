@@ -232,8 +232,8 @@ void MainWindow::updateOffsetLineValue(int value)
 }
 void MainWindow::onXStartSliderChanged(int value)
 {
-    point_position =image_width - value;
-    X_of_vt = image_width - value;
+    point_position = value;
+    X_of_vt = value;
     qDebug() << "x start slider value changed:" << value;
 
     // Set the X-Start value
@@ -241,7 +241,7 @@ void MainWindow::onXStartSliderChanged(int value)
 void MainWindow::onXEndSliderChanged(int value)
 {
     X_of_vb = image_width - value;
-    bottom_point_position = image_width - value;
+    bottom_point_position = value;
     qDebug() << "x start slider value changed:" << value;
     // Set the X-End value
 }

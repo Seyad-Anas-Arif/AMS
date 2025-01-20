@@ -5,10 +5,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GUI3
 TEMPLATE = app
 
-SOURCES += main.cpp \
-            LaserDetection.cpp
-
-HEADERS += LaserDetection.h
+SOURCES += main.cpp ControlWindow.cpp roi.cpp
+HEADERS += ControlWindow.h roi.h
 
 # OpenCV configuration using pkg-config
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio \

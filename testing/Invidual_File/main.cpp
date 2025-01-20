@@ -1,37 +1,41 @@
+// 
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include "LaserDetection.h"
+#include <QApplication>
+#include "roi.h"
+#include "ControlWindow.h"
 
-int main() {
-    cv::VideoCapture cap(0, cv::CAP_V4L2);
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
 
+    ControlWindow controlWindow;
+    controlWindow.show();
+
+    cv::VideoCapture cap(0);
     if (!cap.isOpened()) {
-        std::cerr << "Error: Unable to open the video feed." << std::endl;
+        std::cerr << "Error: Could not open camera." << std::endl;
         return -1;
     }
 
-    //cv::namedWindow("Laser Detection", cv::WINDOW_NORMAL);
-
+    cv::Mat frame;
     while (true) {
-        cv::Mat frame;
         cap >> frame;
-
         if (frame.empty()) {
-            std::cerr << "Error: Unable to capture frame from video feed." << std::endl;
+            std::cerr << "Error: Could not read frame." << std::endl;
             break;
-        } else {
-            LaserDetection laser_detection(frame);
-            auto [laser, x1, y1, x2, y2] = laser_detection.laserDetection();
+        }
 
-            cv::imshow("Laser Detection", laser);
+        cv::resize(frame, frame, cv::Size(image_width, image_height));
+        cv::Mat roiFrame = ROI(frame);
+        cv::imshow("After ROI", roiFrame);
 
-            if (cv::waitKey(1) == 27) {
-                break;
-            }
+        if (cv::waitKey(1) == 'q') {
+            break;
         }
     }
 
     cap.release();
     cv::destroyAllWindows();
-    return 0;
+
+    return app.exec();
 }

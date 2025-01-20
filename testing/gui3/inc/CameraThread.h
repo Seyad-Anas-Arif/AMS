@@ -62,7 +62,7 @@ private:
 
 
     void processFrame(cv::Mat &frame);
-    std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame, int line_position_y_start, int line_position_y_end, int point_position, int bottom_point_position, int px, int py, int bottom_px);
+    std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame);
     Ui::MainWindow *ui;
 
 };
