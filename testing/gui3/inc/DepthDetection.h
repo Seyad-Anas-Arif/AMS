@@ -30,5 +30,10 @@ private:
 
     static void loadCalibrationData(const std::string &calibrationFile);
 };
+#ifdef ENABLE_DD_DEBUG
+    #define DD_FILE_DEBUG qDebug()
+#else
+    #define DD_FILE_DEBUG if (false) qDebug()
+#endif
 
 #endif // DEPTHDETECTION_H

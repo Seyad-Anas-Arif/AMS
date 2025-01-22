@@ -1,9 +1,38 @@
+#define ENABLE_MAIN_DEBUG 1
 #include "../inc/mainwindow.h"
 #include "../inc/SharedVariables.h"
 
 using namespace std;
 
+std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat &frame)
+{
 
+    cv::Mat img;
+    frame.copyTo(img);
+
+    // Draw horizontal line
+    cv::line(img, cv::Point(0, line_position_y_start), cv::Point(image_width - 1, line_position_y_end), cv::Scalar(255, 255, 255), line_thickness);
+
+    // Calculate and draw vertical line from point to bottom
+    int px = static_cast<int>(point_position); // Convert point_position to an integer
+    // Calculate the y-coordinate (py) based on the proportion along the line
+    int py = static_cast<int>(line_position_y_start +
+                              (point_position / static_cast<double>(image_width)) *
+                                  (line_position_y_end - line_position_y_start));
+
+    px = std::max(0, std::min(px, image_width - 1));
+    py = std::max(0, std::min(py, image_height - 1));
+
+    bottom_px = int(bottom_point_position);
+    bottom_px = std::clamp(bottom_px, 0, image_width - 1);
+
+    cv::line(img, cv::Point(px, py), cv::Point(bottom_px, bottom_line_y), cv::Scalar(255, 255, 255), line_thickness);
+    MAIN_FILE_DEBUG << "px: " << px << " py: " << py << " bottom_px: " << bottom_px;
+
+    return std::make_tuple(img, line_position_y_start, line_position_y_end, point_position, bottom_point_position, px, py, bottom_px);
+    
+
+}
 
 QMap<QString, QMap<QString, int>> saved_configs;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
@@ -16,12 +45,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     image_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); // Get actual frame height
     image_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));   // Get actual frame width
 
-
     // Connect signals from CameraThread to slots in MainWindow
     connect(cameraThread, &CameraThread::imageMain, this, &MainWindow::updateMainImage);
     connect(cameraThread, &CameraThread::imageResult, this, &MainWindow::updateMainImage);
-
-    
 
     connect(ui->Developer_btn, &QPushButton::clicked, this, &MainWindow::onDeveloperbuttonClicked);
     connect(ui->dw_back_btn, &QPushButton::clicked, this, &MainWindow::dwBackButtonClicked);
@@ -35,15 +61,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(ui->delete_btn, &QPushButton::clicked, this, &MainWindow::onDeleteButtonClicked);
 
     // Connect sliders or other UI elements to update exposure and offset line values
-     connect(ui->settings_comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSettingsComboBoxChanged);
+    connect(ui->settings_comboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSettingsComboBoxChanged);
     connect(ui->exposure_spinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::updateExposure);
     connect(ui->offset_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::updateOffsetLineValue);
+    connect(ui->offset_slider, &QSlider::sliderPressed,this , &MainWindow::enableoffsetview);
+    connect(ui->offset_slider, &QSlider::sliderReleased,this , &MainWindow::disableoffsetview); 
     connect(ui->y_start_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onYStartSliderChanged);
     connect(ui->y_end_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onYEndSliderChanged);
     connect(ui->x_start_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onXStartSliderChanged);
     connect(ui->X_end_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onXEndSliderChanged);
-
-
+    connect(ui->offset_slider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), this, &MainWindow::onXEndSliderChanged);
 
     // window switch buttons
     connect(ui->run_btn, &QPushButton::clicked, this, &MainWindow::onRunButtonClicked);
@@ -52,11 +79,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // Start the camera thread
     cameraThread->start();
 
-    configureSlider(ui->y_start_slider, 0, image_height, image_height/2);
-    configureSlider(ui->y_end_slider, 0, image_height, image_height/2);
-    configureSlider(ui->x_start_slider, 0, image_width, image_width/2);
-    configureSlider(ui->X_end_slider, 0, image_width, image_width/2);
-   
+    configureSlider(ui->y_start_slider, 0, image_height, image_height / 2);
+    configureSlider(ui->y_end_slider, 0, image_height, image_height / 2);
+    configureSlider(ui->x_start_slider, 0, image_width, image_width / 2);
+    configureSlider(ui->X_end_slider, 0, image_width, image_width / 2);
 }
 
 MainWindow::~MainWindow()
@@ -114,9 +140,9 @@ void MainWindow::onApplyButtontoggled()
 {
     if (ui->apply_btn->text() == "Apply")
     {
-        //after setting are applied
+        // after setting are applied
         ui->apply_btn->setText("Unapply");
-        qDebug() << "Apply button is PRESSED    !";
+        MAIN_FILE_DEBUG << "Apply button is PRESSED    !";
         ui->Default_btn->setEnabled(false);
         ui->save_btn->setEnabled(false);
         ui->settings_comboBox->setEnabled(false);
@@ -124,12 +150,12 @@ void MainWindow::onApplyButtontoggled()
     }
     else
     {
-        qDebug() << "Apply button is RELEASED!";
+        MAIN_FILE_DEBUG<< "Apply button is RELEASED!";
         ui->apply_btn->setText("Apply");
         ui->Default_btn->setEnabled(true);
         ui->save_btn->setEnabled(true);
         ui->settings_comboBox->setEnabled(true);
-         setSlidersEditable(true);
+        setSlidersEditable(true);
     }
 }
 
@@ -215,9 +241,11 @@ void MainWindow::dwBackButtonClicked()
 
 //------------------------------------Slider and ComboBox Actions------------------------------------//
 
-void MainWindow::configureSlider(QSlider *slider, int min, int max, int initialValue) {
+void MainWindow::configureSlider(QSlider *slider, int min, int max, int initialValue)
+{
     qDebug() << "Configuring slider with min:" << min << "max:" << max << "initial:" << initialValue;
-    if (slider) {
+    if (slider)
+    {
         slider->setRange(min, max);
         slider->setValue(initialValue);
     }
@@ -229,6 +257,14 @@ void MainWindow::updateExposure(int value)
 void MainWindow::updateOffsetLineValue(int value)
 {
     cameraThread->updateOffsetLineValue(value);
+}
+void MainWindow::enableoffsetview()
+{
+    plot_point = true;
+}
+void MainWindow::disableoffsetview()
+{
+    plot_point = false;
 }
 void MainWindow::onXStartSliderChanged(int value)
 {

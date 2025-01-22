@@ -1,3 +1,4 @@
+#define ENABLE_LASER_DEBUG 1
 #include "../inc/BlueLaserDetection.h"
 
 LaserDetection::LaserDetection(const cv::Mat& frame) : frame(frame), optimal_line(), laser() {
@@ -7,7 +8,7 @@ LaserDetection::LaserDetection(const cv::Mat& frame) : frame(frame), optimal_lin
 }
 
 cv::Vec4i LaserDetection::selectOptimalLine(const std::vector<cv::Vec4i>& lines) {
-   //qDebug() << "Selecting optimal line.";
+   LASER_FILE_DEBUG << "Selecting optimal line.";
     if (lines.empty()) {
         return cv::Vec4i();
     }
@@ -55,7 +56,7 @@ cv::Vec4i LaserDetection::selectOptimalLine(const std::vector<cv::Vec4i>& lines)
 }
 
 cv::Vec4i LaserDetection::extendLineToBoundaries(const cv::Vec4i& line, const cv::Size& image_size, int midpoint) {
-   // qDebug() << "Extending line to boundaries.";
+   LASER_FILE_DEBUG << "Extending line to boundaries.";
     if (line == cv::Vec4i()) {
         return cv::Vec4i();
     }
@@ -82,7 +83,7 @@ cv::Vec4i LaserDetection::extendLineToBoundaries(const cv::Vec4i& line, const cv
 }
 
 std::tuple<cv::Mat, int, int, int, int> LaserDetection::plotOptimalLine(int midpoint) {
-  //  qDebug() << "Plotting optimal line.";
+  LASER_FILE_DEBUG << "Plotting optimal line.";
     std::vector<cv::Vec4i> lines;
     cv::HoughLinesP(laser, lines, 1, CV_PI / 180, 50, 0, 100);
 
@@ -103,7 +104,7 @@ std::tuple<cv::Mat, int, int, int, int> LaserDetection::plotOptimalLine(int midp
 }
 
 std::tuple<cv::Mat, int, int, int, int> LaserDetection::laserDetection() {
-    //qDebug() << "Laser detection started.";
+    LASER_FILE_DEBUG << "Laser detection started.";
     cv::Mat hsv_frame;
     cv::cvtColor(frame, hsv_frame, cv::COLOR_BGR2HSV);
 
@@ -153,5 +154,7 @@ std::tuple<cv::Mat, int, int, int, int> LaserDetection::laserDetection() {
     }
 
     laser = com_mask;
+    LASER_FILE_DEBUG << "Laser detection completed.";
     return plotOptimalLine();
+
 }

@@ -22,6 +22,7 @@ extern int offset_line_value;
 extern int bottom_px;
 extern int py;
 extern int px;
+extern bool plot_point;
 
 
 extern int X_of_vb;

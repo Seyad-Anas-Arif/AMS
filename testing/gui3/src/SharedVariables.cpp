@@ -23,6 +23,7 @@ int default_bottom_point_position = bottom_point_position;
 int bottom_px;
 int py = image_height / 2;
 int px = image_width / 2;
+bool plot_point ;
 
 //creating varible for  drwaing line in frame
 //x1 is bottom point of vertical line (where y is maximum)

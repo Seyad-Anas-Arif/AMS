@@ -29,5 +29,9 @@ private:
     cv::Vec4i optimal_line;
     cv::Mat laser;
 };
-
+#ifdef ENABLE_LASER_DEBUG
+    #define LASER_FILE_DEBUG qDebug()
+#else
+    #define LASER_FILE_DEBUG if (false) qDebug()
+#endif
 #endif // BLUELASERDETECTION_H

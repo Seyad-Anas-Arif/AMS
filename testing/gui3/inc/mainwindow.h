@@ -59,6 +59,8 @@ private slots:
     void onSettingsComboBoxChanged(int index);
     void restoreDefaultValues();
     void setSlidersEditable(bool editable);
+    void enableoffsetview();
+    void disableoffsetview();
 private:
     Ui::MainWindow *ui;
     CameraThread *cameraThread;
@@ -67,6 +69,13 @@ private:
    
 };
 
+std::tuple<cv::Mat, int, int, int, int, int, int, int>UsersLiveFeed(const cv::Mat &frame);
+
+#ifdef ENABLE_MAIN_DEBUG
+    #define MAIN_FILE_DEBUG qDebug()
+#else
+    #define MAIN_FILE_DEBUG if (false) qDebug()
+#endif
 
 
 #endif // MAINWINDOW_H

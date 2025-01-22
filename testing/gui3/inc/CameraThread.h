@@ -62,10 +62,16 @@ private:
 
 
     void processFrame(cv::Mat &frame);
-    std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame);
+   // std::tuple<cv::Mat, int, int, int, int, int, int, int> UsersLiveFeed(const cv::Mat& frame);
     Ui::MainWindow *ui;
 
 };
+
+#ifdef ENABLE_CAM_DEBUG
+    #define CAM_FILE_DEBUG qDebug()
+#else
+    #define CAM_FILE_DEBUG if (false) qDebug()
+#endif
 
 
 #endif // CAMERATHREAD_H
